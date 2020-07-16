@@ -1,16 +1,16 @@
 // Arquivo responsável pelo formato dos dados
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-import {uuid} from 'uuidv4';
-
+@Entity('appointments') // indica que o model vai ser armazenado dentro da tabela 'appointments'
 class Appointment {
+    @PrimaryGeneratedColumn('uuid')
     id: string;
-    provider: string;
-    date: Date;
 
-    constructor({ provider, date }: Omit<Appointment, 'id'>) {
-        this.id = uuid();
-        this.provider = provider;
-        this.date = date;
-    }
+    @Column()
+    provider: string;
+
+    @Column('timestamp with time zone')
+    date: Date;
 }
- export default Appointment;
+
+export default Appointment;
