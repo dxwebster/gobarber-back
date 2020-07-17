@@ -1,5 +1,6 @@
 // Arquivo responsável pelo formato dos dados
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import User from './User';
 
 @Entity('appointments') // indica que o model vai ser armazenado dentro da tabela 'appointments'
 class Appointment {
@@ -7,10 +8,21 @@ class Appointment {
     id: string;
 
     @Column()
-    provider: string;
+    provider_id: string;
+
+    @ManyToOne(() => User) // muitos agendamentos para um único usuário
+    @JoinColumn({ name: 'provider_id' }) // qual a coluna que vai identicar o prestador desse agendamento
+    provider: User;
 
     @Column('timestamp with time zone')
     date: Date;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
+
 }
 
 export default Appointment;

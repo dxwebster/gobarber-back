@@ -7,13 +7,13 @@ import Appointment from '../models/Appointment'; // importa o model de appointme
 import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositório de appointment
 
 interface RequestDTO {
-    provider: string;
+    provider_id: string;
     date: Date;
 }
 
 
 class CreateAppointmentService {
-    public async execute({ date, provider }: RequestDTO): Promise<Appointment> {
+    public async execute({ date, provider_id }: RequestDTO): Promise<Appointment> {
         const appointmentsRepository = getCustomRepository(AppointmentsRepository);
 
         const appointmentDate = startOfHour(date); // startOfHour: formata a hora sem minutos ou segundos //
@@ -23,7 +23,7 @@ class CreateAppointmentService {
             throw  Error('This appointmnet is already booked');
         }
 
-        const appointment = appointmentsRepository.create({ provider, date: appointmentDate }); // cria um novo appointment
+        const appointment = appointmentsRepository.create({ provider_id, date: appointmentDate }); // cria um novo appointment
         await appointmentsRepository.save(appointment); // salva o registro no banco de dados
 
         return appointment; // retorna o appointment feito
