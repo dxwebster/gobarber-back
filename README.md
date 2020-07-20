@@ -13,26 +13,28 @@ O banco de dados foi desenvolvido utilizando as seguintes tecnologias
 
 ## 🗂 Como criar essa aplicação do zero
 Pré-requesitos para criar esse banco de dados do zero:
-- Node Instalado ([https://nodejs.org/en/])
+- Node Instalado (https://nodejs.org/en/)
 
 ## Instalação do Docker
 O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
 Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
 
-O Docker poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu epermite rodar o linux dentro do windows.
-Para instalar o Docker, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
+No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
+Para instalar o Docker no Windows Home, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
 
-## Criação de um conteiner par ao Posgres
+## Criação de um conteiner para o Posgres
 Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
-Nome da imagem: gostack_postgres
-Password: docker
-Porta do container: 5432 
-Porta do sistema: 5432 (verificar antes se a porta está disponível)
-Banco de dados: Postgres
+- Nome da imagem: gostack_postgres
+- Password: docker
+- Porta do container: 5432 
+- Porta do sistema: 5432 (verificar antes se a porta está disponível)
+- Banco de dados: Postgres
 
 Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
 
-O comando acima significa que v
+Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
 
 # Primeiros passos do BD GoBarber
 
