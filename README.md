@@ -1,4 +1,51 @@
 ## 🔖  Sobre
+Esse é um exemplo de como utilizar o NodeJS em conjunto com o Insomnia para criar uma aplicação que cria, lista, filtra, atualiza e deleta projetos, conhecida como CRUD.
+
+## 🚀 Tecnologias utilizadas
+O projeto foi desenvolvido utilizando as seguintes tecnologias
+* NodeJS
+* Express
+* Typescript
+* uuidv4
+* Insomnia
+
+## 🗂 Como criar essa aplicação do zero
+Abaixo você vai encontrar todas a informações de como criar essa aplicação do zero.
+Primeiro passo é instalar o Node: https://nodejs.org/en/
+
+## Instalação das bibliotecas
+
+**Instalar o yarn**: `npm install -g yarn`
+
+Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
+
+**Iniciar o node na pasta** _(cria o arquivo 'package.json')_: `yarn init -y`
+
+**Instalar o Express** _(cria a pasta 'node_modules' e o arquivo 'package-lock.json')_: `yarn add express -D`
+
+**Instalar a definição de tipos do Express**: `yarn add @types/express -D`
+
+**Instalar o Typescript**: `yarn add typescript -D`
+
+**Iniciar o Typescript na pasta** _(cria o arquivo 'tsconfig.json')_:
+
+
+Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta. Vamos escrever nossos códigos nesse arquivo index.js.
+
+
+## Configuração do Typescript
+
+No arquivo 'tsconfig.json', configurar qual o diretório que vai armazenar nossa aplicação javascript.
+O rootDir, ou seja, o diretório raiz será o próprio 'src' e 'outDir' será um diretório chamado 'dist'.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_VZXWmS07H.png" />
+
+Feita essas configurações, ao executar `yarn tsc`, a código do arquivo server.ts será convertido para .js e aparecerá na pasta 'dist'.
+Até esse ponto, a estrutura de pastas do projeto deve estar assim:
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_V-UwYvPOz.png" />
+
+## 🔖  Sobre
 Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
 
 ## 🚀 Tecnologias utilizadas
@@ -9,8 +56,6 @@ O banco de dados foi desenvolvido utilizando as seguintes tecnologias
 * Postgres
 * WSL2
 
-## 🗂 Como criar essa aplicação do zero
-O Node já deve estar instalado.
 
 ## Instalação e configuração do Docker
 O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
@@ -36,7 +81,7 @@ Para verificar se o postgres está executando, basta executar o comando `docker 
 Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
 É possível fazer isso também pelo dashboard do Docker Desktop.
 
-# Instalação e Configuração do DBeaver
+## Instalação e Configuração do DBeaver
 O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
 
 - Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
