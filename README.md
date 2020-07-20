@@ -4,25 +4,22 @@ Essa é a criação das primeiras funcionalidades do back-end da aplicação GoB
 ## 🚀 Tecnologias utilizadas
 O banco de dados foi desenvolvido utilizando as seguintes tecnologias
 * NodeJS
-* Express
-* uuidv4
 * Docker
 * DBeaver
 * Postgres
 * WSL2
 
 ## 🗂 Como criar essa aplicação do zero
-Pré-requesitos para criar esse banco de dados do zero:
-- Node Instalado (https://nodejs.org/en/)
+O Node já deve estar instalado.
 
-## Instalação do Docker
+## Instalação e configuração do Docker
 O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
 Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
 
 No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
 Para instalar o Docker no Windows Home, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
 
-## Criação de um conteiner para o Posgres
+## Criação de um conteiner para o Postgres
 Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
 - Nome da imagem: gostack_postgres
 - Password: docker
@@ -36,11 +33,21 @@ Para verificar se o postgres está executando, basta executar o comando `docker 
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
 
-# Primeiros passos do BD GoBarber
+Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
+É possível fazer isso também pelo dashboard do Docker Desktop.
 
-Criar uma database no Dbeaver
+# Instalação e Configuração do DBeaver
+O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
 
-<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" />
+- Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
+
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
+
+- Agora vamos criar o banco de dados
+<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="350" />
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="350" />
+
+
 
 Instalação do TypeORM e driver do postgres `yarn add typeorm pg`
 
