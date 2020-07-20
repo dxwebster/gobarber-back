@@ -1,3 +1,39 @@
+## 🔖  Sobre
+Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
+
+## 🚀 Tecnologias utilizadas
+O banco de dados foi desenvolvido utilizando as seguintes tecnologias
+* NodeJS
+* Express
+* uuidv4
+* Docker
+* DBeaver
+* Postgres
+* WSL2
+
+## 🗂 Como criar essa aplicação do zero
+Pré-requesitos para criar esse banco de dados do zero:
+- Node Instalado ([https://nodejs.org/en/])
+
+## Instalação do Docker
+O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
+Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
+
+O Docker poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu epermite rodar o linux dentro do windows.
+Para instalar o Docker, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
+
+## Criação de um conteiner par ao Posgres
+Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
+Nome da imagem: gostack_postgres
+Password: docker
+Porta do container: 5432 
+Porta do sistema: 5432 (verificar antes se a porta está disponível)
+Banco de dados: Postgres
+
+Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
+
+O comando acima significa que v
+
 # Primeiros passos do BD GoBarber
 
 Criar uma database no Dbeaver
