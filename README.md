@@ -1,5 +1,5 @@
 ## 🔖  Sobre
-Esse é um exemplo de como utilizar o NodeJS em conjunto com o Insomnia para criar uma aplicação que cria, lista, filtra, atualiza e deleta projetos, conhecida como CRUD.
+Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros.
 
 ## 🚀 Tecnologias utilizadas
 O projeto foi desenvolvido utilizando as seguintes tecnologias
@@ -27,25 +27,29 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
 **Instalar o Typescript**: `yarn add typescript -D`
 
-**Iniciar o Typescript na pasta** _(cria o arquivo 'tsconfig.json')_:
+**Iniciar o TSC (TypeScript Compiler)**: _(cria o arquivo 'tsconfig.json')_: `yarn tsc --init`
 
+**Instalar o TS-Node-DEV**: `yarn add ts-node-dev -D`
 
-Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta. Vamos escrever nossos códigos nesse arquivo index.js.
+Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
-
-## Configuração do Typescript
-
-No arquivo 'tsconfig.json', configurar qual o diretório que vai armazenar nossa aplicação javascript.
-O rootDir, ou seja, o diretório raiz será o próprio 'src' e 'outDir' será um diretório chamado 'dist'.
+## Configuração do TSC (TypeScript Compiler)
+No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript.
+O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_3_VZXWmS07H.png" />
 
-Feita essas configurações, ao executar `yarn tsc`, a código do arquivo server.ts será convertido para .js e aparecerá na pasta 'dist'.
-Até esse ponto, a estrutura de pastas do projeto deve estar assim:
+Apesar do TSC ser essencial para a aplicação, ele não será utilizado no momento de desenvolvimento. Ao invés do TSC, utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades como compilação e live Reloader.
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_V-UwYvPOz.png" />
+## Configuração do TS-Node-DEV
+O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fase de desenvolvimento, o TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo).
+No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
 
-## 🔖  Sobre
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_6_i6KRRyW3U.png" />
+
+
+
+# Criação do banco de dados
 Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
 
 ## 🚀 Tecnologias utilizadas
