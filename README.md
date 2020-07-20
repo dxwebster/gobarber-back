@@ -44,8 +44,7 @@ O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dad
 <img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
 
 - Agora vamos criar o banco de dados
-<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="350" />
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="350" />
+<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" /><img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
 
 
 
