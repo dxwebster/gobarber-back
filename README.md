@@ -47,6 +47,12 @@ No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_6_i6KRRyW3U.png" />
 
+Para iniciar o servidor, executar `yarn dev:server`
+
+
+[continuar aqui......]
+Construindo Aplicação > Layout da aplicação
+
 
 
 # Criação do banco de dados
