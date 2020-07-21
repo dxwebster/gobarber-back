@@ -50,12 +50,12 @@ No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-
 Para iniciar o servidor, executar `yarn dev:server`
 
 
-[continuar aqui......]
+# [continuar aqui......]
 Construindo Aplicação > Layout da aplicação
 
 
 
-# Criação do banco de dados
+## Criação do banco de dados
 Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
 
 ## 🚀 Tecnologias utilizadas
