@@ -1,8 +1,107 @@
-# Primeiros passos do BD GoBarber
+## 🔖  Sobre
+Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros.
 
-Criar uma database no Dbeaver
+## 🚀 Tecnologias utilizadas
+O projeto foi desenvolvido utilizando as seguintes tecnologias
+* NodeJS
+* Express
+* Typescript
+* uuidv4
+* Insomnia
 
-<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" />
+## 🗂 Como criar essa aplicação do zero
+Abaixo você vai encontrar todas a informações de como criar essa aplicação do zero.
+Primeiro passo é instalar o Node: https://nodejs.org/en/
+
+## Instalação das bibliotecas
+
+**Instalar o yarn**: `npm install -g yarn`
+
+Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
+
+**Iniciar o node na pasta** _(cria o arquivo 'package.json')_: `yarn init -y`
+
+**Instalar o Express** _(cria a pasta 'node_modules' e o arquivo 'package-lock.json')_: `yarn add express -D`
+
+**Instalar a definição de tipos do Express**: `yarn add @types/express -D`
+
+**Instalar o Typescript**: `yarn add typescript -D`
+
+**Iniciar o TSC (TypeScript Compiler)**: _(cria o arquivo 'tsconfig.json')_: `yarn tsc --init`
+
+**Instalar o TS-Node-DEV**: `yarn add ts-node-dev -D`
+
+Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
+
+## Configuração do TSC (TypeScript Compiler)
+No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript.
+O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_VZXWmS07H.png" />
+
+Apesar do TSC ser essencial para a aplicação, ele não será utilizado no momento de desenvolvimento. Ao invés do TSC, utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades como compilação e live Reloader.
+
+## Configuração do TS-Node-DEV
+O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fase de desenvolvimento, o TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). (O TS-Node-Dev também permite o uso de decorators, algo que veremos mais pra frente quando começarmos a codar). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_6_i6KRRyW3U.png" />
+
+Para iniciar o servidor, executar `yarn dev:server`
+
+
+# [continuar aqui......]
+Construindo Aplicação > Layout da aplicação
+
+
+
+## Criação do banco de dados
+Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
+
+## 🚀 Tecnologias utilizadas
+O banco de dados foi desenvolvido utilizando as seguintes tecnologias
+* NodeJS
+* Docker
+* DBeaver
+* Postgres
+* WSL2
+
+
+## Instalação e configuração do Docker
+O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
+Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
+
+No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
+Para instalar o Docker no Windows Home, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
+
+## Criação de um conteiner para o Postgres
+Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
+- Nome da imagem: gostack_postgres
+- Password: docker
+- Porta do container: 5432 
+- Porta do sistema: 5432 (verificar antes se a porta está disponível)
+- Banco de dados: Postgres
+
+Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
+
+Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
+
+Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
+É possível fazer isso também pelo dashboard do Docker Desktop.
+
+## Instalação e Configuração do DBeaver
+O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
+
+- Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
+
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
+
+- Agora vamos criar o banco de dados, conforme os passos a seguir:
+<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" />
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
+
+
 
 Instalação do TypeORM e driver do postgres `yarn add typeorm pg`
 
