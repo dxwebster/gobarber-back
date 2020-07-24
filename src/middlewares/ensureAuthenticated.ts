@@ -9,9 +9,11 @@ interface TokenPayload {
     sub: string;
 }
 
-
-export default function ensureAuthenticated( request: Request, response: Response, next: NextFunction): void {
-
+export default function ensureAuthenticated(
+    request: Request,
+    response: Response,
+    next: NextFunction,
+): void {
     // validação do token JWT
     const authHeader = request.headers.authorization;
     if (!authHeader) {
@@ -33,5 +35,4 @@ export default function ensureAuthenticated( request: Request, response: Respons
     } catch {
         throw new Error('Invalid JWT token');
     }
-
 }

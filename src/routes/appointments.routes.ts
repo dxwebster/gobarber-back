@@ -9,7 +9,6 @@ import CreateAppointmentService from '../services/CreateAppointmentService'; // 
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a autenticação do JWT token
 
-
 const appointmentsRouter = Router(); // cria uma variável de rotas
 
 appointmentsRouter.use(ensureAuthenticated); // aplica o middleware em todas as rotas de agendamentos
@@ -19,21 +18,23 @@ appointmentsRouter.get('/', async (request, response) => {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
     const appointments = await appointmentsRepository.find();
     return response.json(appointments);
-
 });
 
 // Rota que cria novos appointments
-appointmentsRouter.post('/', async (request, response) => { // faz a rota de método post para criar um novo appointmment
+appointmentsRouter.post('/', async (request, response) => {
+    // faz a rota de método post para criar um novo appointmment
     try {
         const { provider_id, date } = request.body; // pega as informações vinda do corpo da requisição
 
         const parsedDate = parseISO(date); // transformação de dados pode deixar na rota (parseISO: converte string de data com formato date nativo do js)
 
         const createAppointment = new CreateAppointmentService(); // a regra de negócio fica dentro do service
-        const appointment = await createAppointment.execute({ date: parsedDate, provider_id }); // executa o service
+        const appointment = await createAppointment.execute({
+            date: parsedDate,
+            provider_id,
+        }); // executa o service
 
         return response.json(appointment); // retorna o appointment
-
     } catch (err) {
         return response.status(400).json({ error: err.message });
     }
