@@ -1,6 +1,7 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import authConfig from '../config/auth';
 
 import User from '../models/User';
 
@@ -16,6 +17,7 @@ interface Response {
 
 class AuthenticateUserService{
     public async execute ({ email, password } : Request) : Promise<Response> {
+
         // verficar se é um usuário válido
         const usersRepository = getRepository(User);
 
@@ -32,16 +34,16 @@ class AuthenticateUserService{
             throw new Error('Incorrect email/password combination');
         }
 
-        const token = sign({  }, '91802ea8b9a3b5a75c70c93d84410186', {
+        // verificar se o token é válido
+        const { secret, expiresIn } = authConfig.jwt;
+
+        const token = sign({}, secret, {
             subject: user.id,
-            expiresIn: '1d',
+            expiresIn,
         });
 
         //usuário autenticado
-        return {
-            user,
-            token,
-        }
+        return { user, token, }
 
     }
 }

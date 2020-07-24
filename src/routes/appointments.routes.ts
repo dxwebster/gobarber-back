@@ -7,8 +7,12 @@ import { getCustomRepository } from 'typeorm'; // importa o custom repository do
 import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositorio de appointments
 import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o service de appointments
 
+import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a autenticação do JWT token
+
 
 const appointmentsRouter = Router(); // cria uma variável de rotas
+
+appointmentsRouter.use(ensureAuthenticated); // aplica o middleware em todas as rotas de agendamentos
 
 // Rota que lista os appointments
 appointmentsRouter.get('/', async (request, response) => {
