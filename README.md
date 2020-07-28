@@ -1,5 +1,5 @@
 ## 🔖  Sobre
-Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros.
+Essa é a criação das primeiras funcionalidades do back-end da GoBarber, uma aplicação que permite o agendamento de serviços de cabeleireiros.
 
 ## 🚀 Tecnologias utilizadas
 O projeto foi desenvolvido utilizando as seguintes tecnologias
