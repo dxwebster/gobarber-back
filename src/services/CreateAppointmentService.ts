@@ -3,6 +3,8 @@
 import { startOfHour } from 'date-fns'; // importa os métodos para lidar com datas
 import { getCustomRepository } from 'typeorm';
 
+import AppError from '../errors/AppError';
+
 import Appointment from '../models/Appointment'; // importa o model de appointment
 import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositório de appointment
 
@@ -20,7 +22,7 @@ class CreateAppointmentService {
 
         const findAppointmentInSameDate = await appointmentsRepository.findByDate(appointmentDate); //verifica se já tem um appointment na mesma data
         if (findAppointmentInSameDate){ // se encontrar o appointment na mesma data de um já existente retorna erro
-            throw  Error('This appointmnet is already booked');
+            throw new AppError('This appointmnet is already booked');
         }
 
         const appointment = appointmentsRepository.create({ provider_id, date: appointmentDate }); // cria um novo appointment

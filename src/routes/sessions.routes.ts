@@ -5,22 +5,20 @@ const sessionsRouter = Router();
 
 // Rota que cria novo usuário
 sessionsRouter.post('/', async (request, response) => {
-    try {
-        const { email, password } = request.body;
 
-        const authenticateUser = new AuthenticateUserService();
+    const { email, password } = request.body;
 
-        const { user, token } = await authenticateUser.execute({
-            email,
-            password,
-        });
+    const authenticateUser = new AuthenticateUserService();
 
-        delete user.password; // é bom nunca retornar o password do user
+    const { user, token } = await authenticateUser.execute({
+        email,
+        password,
+    });
 
-        return response.json({ user, token });
-    } catch (err) {
-        return response.status(400).json({ error: err.message });
-    }
+    delete user.password; // é bom nunca retornar o password do user
+
+    return response.json({ user, token });
+
 });
 
 export default sessionsRouter; // exporta a rota

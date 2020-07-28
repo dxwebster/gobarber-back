@@ -3,6 +3,8 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
+import AppError from '../errors/AppError';
+
 import User from '../models/User';
 
 interface Request {
@@ -22,15 +24,15 @@ class AuthenticateUserService {
 
         const user = await usersRepository.findOne({ where: { email } });
         if (!user) {
-            throw new Error('Incorrect email/password combination');
+            throw new AppError('Incorrect email/password combination.', 401);
         }
 
         // user.password = senha já gravada no banco de dados (criptografada )
         // password = senha que o user colocou para logar (não criptografada)
-
-        const passwordMatched = await compare(password, user.password); // compare é um método do bcryptjs que compara uma senha não criptografada com uma senha criptografada
+        // compare() é um método do bcryptjs que compara uma senha não criptografada com uma senha criptografada
+        const passwordMatched = await compare(password, user.password);
         if (!passwordMatched) {
-            throw new Error('Incorrect email/password combination');
+            throw new AppError('Incorrect email/password combination.', 401);
         }
 
         // verificar se o token é válido
