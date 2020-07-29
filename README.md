@@ -47,11 +47,13 @@ O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fa
 Para iniciar o servidor, executar `yarn dev:server`
 
 
-## Criação de Rota de Agendamento
+## Criação de Rotas de Agendamentos
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro.
 Os arquivos de todas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição, devolver uma resposta e após isso, devolver uma resposta.
 Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'.
+
+Para lidar com datas e horários, vamos instalar uma dependência chamada Date-fns: `yarn date-fns`. Ela vai converter uma string enviada pelo json, para um  formato date() nativo do javascript.
 
 As primeiras linhas, faremos as importações de dependências:
     
@@ -109,6 +111,70 @@ E no final, exportamos as rotas
 
 ```ts
 export default appointmentsRouter; // exporta a rota
+```
+
+## Criação do Model de Agendamentos
+
+Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointments.ts.
+O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
+
+As primeiras linhas, vamos importar os métodos do typeorm e [...] 
+
+```ts
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import User from './User';
+
+@Entity('appointments') // indica que o model vai ser armazenado dentro da tabela 'appointments'
+class Appointment {
+   
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    provider_id: string;
+
+    @ManyToOne(() => User) // muitos agendamentos para um único usuário
+    @JoinColumn({ name: 'provider_id' }) // qual a coluna que vai identicar o prestador desse agendamento
+    provider: User;
+
+    @Column('timestamp with time zone')
+    date: Date;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
+
+}
+
+export default Appointment;
+```
+
+## Criação do Repositório de Agendamentos
+Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
+O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento.
+Ele vai guardar as informações dos métodos criar, listar, deletar que faremos sob os agendamentos.
+
+Nas primeiras linhas, vamos importar os métodos do typeorm que vamos utilizar e também o model Appointment que já criamos anteriormente.
+Logo abaixo, criaremos o repositório que [...] 
+
+```ts
+import { EntityRepository, Repository } from 'typeorm';
+import Appointment from '../models/Appointment';
+
+@EntityRepository(Appointment)
+class AppointmentsRepository extends Repository<Appointment>{
+    public async findByDate(date: Date): Promise<Appointment | null> {
+        const findAppointment =  await this.findOne({
+            where: { date },
+        });
+
+        return findAppointment || null; // retorna o que encontrou ou retorna nulo
+    }
+}
+
+export default AppointmentsRepository;
 ```
 
 
