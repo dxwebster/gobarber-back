@@ -49,14 +49,26 @@ O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fa
 Para iniciar o servidor, executar `yarn dev:server`
 
 # Primeiros códigos
-Nosso aplicativo consiste no cadastro de usuários que poderão fazer um agendamento de um horário com um cabeleireiro (por ser um prestador de serviço, chamaremos de 'provider'). Portanto, vamos começar criando todo o processo de agendamento, que consiste em na criação de:
+Nosso aplicativo consiste no cadastro de usuários que poderão fazer um agendamento de um horário com um cabeleireiro (por ser um prestador de serviço, chamaremos de 'provider'). 
+Nessa aplicação temos basicamente duas entidades: agendamentos e usuários.
 
-- Duas Rotas de agendamento: criar um novo agendamento e listar todos os agendamentos.
+Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
+
+- Rotas de agendamento: cria um novo agendamento e lista todos os agendamentos.
 - Model de agendamento: teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
 - Repositório de agendamento: procura no banco de dados agendamentos com a data selecionada e retorna.
 - Service de agendamento: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
-## Criação de Rotas de Agendamentos
+Depois, criaremos tudo relacionado a entidade usuários, que consiste na criação de:
+
+- Rotas de usuários: cria um novo usuário e permite o upload de um avatar.
+- Model de usuários: teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
+- Repositório de usuários: procura no banco de dados agendamentos com a data selecionada e retorna.
+- Service de usuários: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+
+## Entidade: Agendamentos
+
+### Criação de Rotas de Agendamentos
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
@@ -123,7 +135,7 @@ E no final, exportamos as rotas
 export default appointmentsRouter; // exporta a rota
 ```
 
-## Criação do Model do Agendamento
+### Criação do Model do Agendamento
 
 Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts.
 O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
@@ -162,7 +174,7 @@ class Appointment {
 export default Appointment;
 ```
 
-## Criação do Repositório de Agendamentos
+### Criação do Repositório de Agendamentos
 
 Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
 O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento.
@@ -189,7 +201,7 @@ class AppointmentsRepository extends Repository<Appointment>{
 export default AppointmentsRepository;
 ```
 
-## Criação do Service de Agendamentos
+### Criação do Service de Agendamentos
 Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'.
 O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
 
