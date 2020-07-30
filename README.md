@@ -37,12 +37,11 @@ No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que va
 
 E aproveitando, já vamos fazer outra configuração que usaremos lá na frente, quando criarmos os models. Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata".
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_n8PVmUF0J.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
 
 Outra configuração que já podemos adiantar é deixar false a propriedade "strictPropertyInitialization", para evitar um conflito na criação das variáveis nos models.
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_2_xlMcSjZV1.png" />
-
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_6A8paM9eZ.png" />
 
 ## Configuração do TS-Node-DEV
 Ao invés do TSC, o TS-Node-Dev será usado durante o desenvolvimento da aplicação, pois é uma solução mais rápida que possui muitas funcionalidades. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). (O TS-Node-Dev também permite o uso de decorators, algo que veremos mais pra frente quando começarmos a codar). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
