@@ -34,7 +34,7 @@ Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript.
 Apesar do TSC ser essencial para a aplicação, ele não será utilizado no momento de desenvolvimento para compilação de códigos. Ao invés do TSC, utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades como compilação e live Reloader. O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_VZXWmS07H.png" />
+<img src="https://ik.imagekit.io/dxwebster/Sem-T_tulo-1_xV4xSId5Q.png" />
 
 E aproveitando, já vamos fazer outra configuração que usaremos lá na frente, quando criarmos os models. Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata".
 
