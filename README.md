@@ -31,7 +31,7 @@ Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
 ## Configurações do TSC
 
-Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Entretando, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Entretanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
+Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Apesar disso, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Portanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
 
 Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
 
@@ -171,11 +171,10 @@ export default Appointment;
 ### 3. Criação do Repositório de Agendamentos
 
 Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
-O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento.
-Ele vai guardar as informações dos métodos criar, listar, deletar que faremos sob os agendamentos.
+O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação.  Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
 
 Nas primeiras linhas, vamos importar os métodos do typeorm que vamos utilizar e também o model Appointment que já criamos anteriormente.
-Logo abaixo, criaremos o repositório que [...] 
+Logo abaixo, criaremos o repositório com nosso novo método 'findByDate()'.
 
 ```ts
 import { EntityRepository, Repository } from 'typeorm';
@@ -196,17 +195,17 @@ export default AppointmentsRepository;
 ```
 
 ### 4. Criação do Service de Agendamentos
-Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'.
-O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
+
+Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'. O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
 
 Nas primeiras linhas, importaremos o Date-fns para lidar com as datas e o método de repositório do typeorm.
 
 ```ts
 import { startOfHour } from 'date-fns'; // importa os métodos para lidar com datas
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository } from 'typeorm'; // importa o método de repositório customizado
 ```
 
-Logo abaixo, vamos importar [...], o model e o repositório de Agendamento
+Logo abaixo, vamos importar [...], o model e o repositório de Agendamentos.
 
 ```ts
 import AppError from '../errors/AppError';
@@ -222,8 +221,7 @@ interface RequestDTO {
     date: Date;
 }
 ```
-O service é criado por meio de classe por meio do método publico 'execute()', que nesse caso significa a criação de um novo agendamento.
-O execute recebe dois parâmetros, a data selecionada e o provider_id que seria o id do cabeleireiro. Dentro do execute, colocaremos a regra de criação do agendamento, ou seja, só pode ocorrer se não houver nenhum outro agendamento no mesmo horário.
+O service é criado por meio de classe por meio do método publico 'execute()', que nesse caso significa a criação de um novo agendamento. O 'execute()' recebe dois parâmetros, a 'data selecionada' e o 'provider_id'. Dentro do execute, colocaremos a regra de criação do agendamento, ou seja, só pode ocorrer um  novo agendamento se não houver nenhum outro agendamento no mesmo horário. E para isso, utilizaremos nosso método 'findByDate()' criado no 'AppointmentsRepository'.
 
 ```ts
 class CreateAppointmentService {
@@ -287,12 +285,14 @@ export default User;
 
 
 ### 3. Criação do Repositório de Usuários
+
+
 ### 4. Criação do Service de Usuários
 
 
 
 
-## Criação do banco de dados
+# Criação do banco de dados
 Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
 
 ## 🚀 Tecnologias utilizadas
@@ -303,8 +303,8 @@ O banco de dados foi desenvolvido utilizando as seguintes tecnologias
 * Postgres
 * WSL2
 
-
 ## Instalação e configuração do Docker
+
 O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
 Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
 
@@ -312,6 +312,7 @@ No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Window
 Para instalar o Docker no Windows Home, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
 
 ## Criação de um conteiner para o Postgres
+
 Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
 - Nome da imagem: gostack_postgres
 - Password: docker
@@ -329,6 +330,7 @@ Para iniciar ou encerrar a execução de um container, basta executar os comando
 É possível fazer isso também pelo dashboard do Docker Desktop.
 
 ## Instalação e Configuração do DBeaver
+
 O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
 
 - Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
@@ -339,7 +341,7 @@ O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dad
 <img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" />
 <img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
 
-
+## Instalação do TypeORM
 
 Instalação do TypeORM e driver do postgres `yarn add typeorm pg`
 
