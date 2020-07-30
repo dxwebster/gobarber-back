@@ -31,26 +31,28 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
 ## Configurações do TSC (TypeScript Compiler)
-No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript. O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
 
-<img src="https://ik.imagekit.io/dxwebster/Sem-T_tulo-1_xV4xSId5Q.png" />
+Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Entretando, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Entretanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'package.json':
 
-E aproveitando, já vamos fazer outra configuração que usaremos lá na frente, quando criarmos os models. Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata".
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
-
-Outra configuração que já podemos adiantar é deixar false a propriedade "strictPropertyInitialization", para evitar um conflito na criação das variáveis nos models.
+Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_4_6A8paM9eZ.png" />
 
+Outra configuração que já podemos adiantar é setar a propriedade "strictPropertyInitialization" como 'false', para evitar um conflito na criação das variáveis nos models.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
+
+
 ## Configuração do TS-Node-DEV
-Ao invés do TSC, o TS-Node-Dev será usado durante o desenvolvimento da aplicação, pois é uma solução mais rápida que possui muitas funcionalidades. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). (O TS-Node-Dev também permite o uso de decorators, algo que veremos mais pra frente quando começarmos a codar). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
+
+Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev. 
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_6_i6KRRyW3U.png" />
 
 Para iniciar o servidor, executar `yarn dev:server`
 
 # Primeiros códigos
+
 Nosso aplicativo consiste no cadastro de usuários que poderão fazer um agendamento de um horário com um cabeleireiro (por ser um prestador de serviço, chamaremos de 'provider'). 
 Nessa aplicação temos basicamente duas entidades: agendamentos e usuários.
 
