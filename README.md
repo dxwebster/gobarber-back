@@ -55,17 +55,17 @@ A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
 
 Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um horário com um cabeleireiro (providers), temos então basicamente duas entidades: agendamentos e usuários. Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
 
-- **1. Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
-- **2. Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-- **3. Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **4. Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
+- **Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
+- **Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
+- **Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 Depois, criaremos tudo relacionado a entidade usuários, criando:
 
-- **1. Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
-- **2. Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
-- **3. Repositório de usuários:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **4. Service de usuários:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
+- **Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
+- **Repositório de usuários:** procura no banco de dados agendamentos com a data selecionada e retorna.
+- **Service de usuários:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 ## Entidade: Agendamentos
 
