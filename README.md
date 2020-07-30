@@ -6,7 +6,6 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 * NodeJS
 * Express
 * Typescript
-* uuidv4
 * Insomnia
 
 # Primeiras configurações
