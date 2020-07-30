@@ -24,15 +24,15 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
 **Instalar o Typescript**: `yarn add typescript -D`
 
-**Iniciar o TSC (TypeScript Compiler)**: _(cria o arquivo 'tsconfig.json')_: `yarn tsc --init`
+**Iniciar o TSC (TypeScript Compiler)** _(cria o arquivo 'tsconfig.json')_: `yarn tsc --init`
 
 **Instalar o TS-Node-DEV**: `yarn add ts-node-dev -D`
 
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
-## Configurações do TSC (TypeScript Compiler)
+## Configurações do TSC
 
-Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Entretando, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Entretanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'package.json':
+Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Entretando, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Entretanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
 
 Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
 
