@@ -54,21 +54,21 @@ Nessa aplicação temos basicamente duas entidades: agendamentos e usuários.
 
 Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
 
-- Rotas de agendamento: cria um novo agendamento e lista todos os agendamentos.
-- Model de agendamento: teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-- Repositório de agendamento: procura no banco de dados agendamentos com a data selecionada e retorna.
-- Service de agendamento: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+1. Rotas de agendamento: cria um novo agendamento e lista todos os agendamentos.
+2. Model de agendamento: teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
+3. Repositório de agendamento: procura no banco de dados agendamentos com a data selecionada e retorna.
+4. Service de agendamento: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 Depois, criaremos tudo relacionado a entidade usuários, que consiste na criação de:
 
-- Rotas de usuários: cria um novo usuário e permite o upload de um avatar.
-- Model de usuários: teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
-- Repositório de usuários: procura no banco de dados agendamentos com a data selecionada e retorna.
-- Service de usuários: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+1. Rotas de usuários: cria um novo usuário e permite o upload de um avatar.
+2. Model de usuários: teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
+3. Repositório de usuários: procura no banco de dados agendamentos com a data selecionada e retorna.
+4. Service de usuários: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 ## Entidade: Agendamentos
 
-### Criação de Rotas de Agendamentos
+### 1. Criação de Rotas de Agendamentos
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
@@ -135,7 +135,7 @@ E no final, exportamos as rotas
 export default appointmentsRouter; // exporta a rota
 ```
 
-### Criação do Model do Agendamento
+### 2. Criação do Model do Agendamento
 
 Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts.
 O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
@@ -174,7 +174,7 @@ class Appointment {
 export default Appointment;
 ```
 
-### Criação do Repositório de Agendamentos
+### 3. Criação do Repositório de Agendamentos
 
 Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
 O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento.
@@ -201,7 +201,7 @@ class AppointmentsRepository extends Repository<Appointment>{
 export default AppointmentsRepository;
 ```
 
-### Criação do Service de Agendamentos
+### 4. Criação do Service de Agendamentos
 Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'.
 O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
 
@@ -252,6 +252,15 @@ class CreateAppointmentService {
 
 export default CreateAppointmentService; // exporta o service de appointment
 ```
+
+## Entidade: Usuários
+
+### 1. Criação de Rotas de Usuários
+### 2. Criação do Model do Usuários
+### 3. Criação do Repositório de Usuários
+### 4. Criação do Service de Usuários
+
+
 
 
 ## Criação do banco de dados
