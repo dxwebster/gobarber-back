@@ -31,8 +31,7 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
 ## Configurações do TSC (TypeScript Compiler)
-No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript.
-Apesar do TSC ser essencial para a aplicação, ele não será utilizado no momento de desenvolvimento para compilação de códigos. Ao invés do TSC, utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades como compilação e live Reloader. O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
+No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript. O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
 
 <img src="https://ik.imagekit.io/dxwebster/Sem-T_tulo-1_xV4xSId5Q.png" />
 
@@ -46,7 +45,7 @@ Outra configuração que já podemos adiantar é deixar false a propriedade "str
 
 
 ## Configuração do TS-Node-DEV
-O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fase de desenvolvimento, o TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). (O TS-Node-Dev também permite o uso de decorators, algo que veremos mais pra frente quando começarmos a codar). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
+Ao invés do TSC, o TS-Node-Dev será usado durante o desenvolvimento da aplicação, pois é uma solução mais rápida que possui muitas funcionalidades. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). (O TS-Node-Dev também permite o uso de decorators, algo que veremos mais pra frente quando começarmos a codar). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_6_i6KRRyW3U.png" />
 
