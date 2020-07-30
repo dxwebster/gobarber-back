@@ -50,7 +50,7 @@ Para iniciar o servidor, executar `yarn dev:server`
 ## Criação de Rotas de Agendamentos
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro.
-Os arquivos de todas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição, devolver uma resposta e após isso, devolver uma resposta.
+Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição, devolver uma resposta e após isso, devolver uma resposta.
 Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'.
 
 Para lidar com datas e horários, vamos instalar uma dependência chamada Date-fns: `yarn date-fns`. Ela vai converter uma string enviada pelo json, para um  formato date() nativo do javascript.
@@ -61,10 +61,13 @@ As primeiras linhas, faremos as importações de dependências:
 import { parseISO } from 'date-fns'; // importa os métodos para lidar com datas
 import { Router } from 'express'; // importa as rotas do express
 import { getCustomRepository } from 'typeorm'; // importa o custom repository do typeorm
+```
 
+Logo abaixo, importaremos os arquivos de Repositório e Service que criamos para os agendamentos e a middleware de Autenticação.
+
+```ts
 import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositorio de appointments
 import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o service de appointments
-
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a autenticação do JWT token
 ```
 
@@ -113,10 +116,11 @@ E no final, exportamos as rotas
 export default appointmentsRouter; // exporta a rota
 ```
 
-## Criação do Model de Agendamentos
+## Criação do Model do Agendamento
 
-Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointments.ts.
+Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts.
 O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
+Ou seja, nessa aplicação, o model de Appointment é nada mais nada menos que o formato que todo agendamento terá no banco de dados.
 
 As primeiras linhas, vamos importar os métodos do typeorm e [...] 
 
@@ -152,6 +156,7 @@ export default Appointment;
 ```
 
 ## Criação do Repositório de Agendamentos
+
 Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
 O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento.
 Ele vai guardar as informações dos métodos criar, listar, deletar que faremos sob os agendamentos.
@@ -177,8 +182,57 @@ class AppointmentsRepository extends Repository<Appointment>{
 export default AppointmentsRepository;
 ```
 
+## Criação do Service de Agendamentos
+Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'.
+O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
 
+Nas primeiras linhas, importaremos o Date-fns para lidar com as datas e o método de repositório do typeorm.
 
+```ts
+import { startOfHour } from 'date-fns'; // importa os métodos para lidar com datas
+import { getCustomRepository } from 'typeorm';
+```
+
+Logo abaixo, vamos importar [...], o model e o repositório de Agendamento
+
+```ts
+import AppError from '../errors/AppError';
+import Appointment from '../models/Appointment'; // importa o model de appointment
+import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositório de appointment
+```
+
+Vamos criar um DTO [...]???
+
+```ts
+interface RequestDTO {
+    provider_id: string;
+    date: Date;
+}
+```
+O service é criado por meio de classe por meio do método publico 'execute()', que nesse caso significa a criação de um novo agendamento.
+O execute recebe dois parâmetros, a data selecionada e o provider_id que seria o id do cabeleireiro. Dentro do execute, colocaremos a regra de criação do agendamento, ou seja, só pode ocorrer se não houver nenhum outro agendamento no mesmo horário.
+
+```ts
+class CreateAppointmentService {
+    public async execute({ date, provider_id }: RequestDTO): Promise<Appointment> {
+        const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+
+        const appointmentDate = startOfHour(date); // startOfHour: formata a hora sem minutos ou segundos //
+
+        const findAppointmentInSameDate = await appointmentsRepository.findByDate(appointmentDate); //verifica se já tem um appointment na mesma data
+        if (findAppointmentInSameDate){ // se encontrar o appointment na mesma data de um já existente retorna erro
+            throw new AppError('This appointmnet is already booked');
+        }
+
+        const appointment = appointmentsRepository.create({ provider_id, date: appointmentDate }); // cria um novo appointment
+        await appointmentsRepository.save(appointment); // salva o registro no banco de dados
+
+        return appointment; // retorna o appointment feito
+    }
+}
+
+export default CreateAppointmentService; // exporta o service de appointment
+```
 
 
 ## Criação do banco de dados
