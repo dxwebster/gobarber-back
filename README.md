@@ -1,7 +1,7 @@
-## 🔖  Sobre
+# 🔖  Sobre
 Essa é a criação das primeiras funcionalidades do back-end da GoBarber, uma aplicação que permite o agendamento de serviços de cabeleireiros.
 
-## 🚀 Tecnologias utilizadas
+# 🚀 Tecnologias utilizadas
 O projeto foi desenvolvido utilizando as seguintes tecnologias
 * NodeJS
 * Express
@@ -9,11 +9,8 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 * uuidv4
 * Insomnia
 
-## 🗂 Como criar essa aplicação do zero
-Abaixo você vai encontrar todas a informações de como criar essa aplicação do zero.
-Primeiro passo é instalar o Node: https://nodejs.org/en/
-
 # Primeiras configurações
+Precisamos preparar o ambiente de desenvolvimento dessa aplicação. Nesse projeto, teremos todo o back-end em formato API Rest, ou seja, vamos trabalhar com entidades e rotas para requisições, models, repositórios e services. Para começarmos, o Node e o Yarn já devem estar instalados. 
 
 ## Instalação das bibliotecas
 
@@ -33,13 +30,20 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
-## Configuração do TSC (TypeScript Compiler)
+## Configurações do TSC (TypeScript Compiler)
 No arquivo 'tsconfig.json', vamos configurar o TSC (TypeScript Compiler), que vai compilador o códgio ts e converter em javascript.
-O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
+Apesar do TSC ser essencial para a aplicação, ele não será utilizado no momento de desenvolvimento para compilação de códigos. Ao invés do TSC, utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades como compilação e live Reloader. O 'rootDir' será o diretório dos arquivos .ts e 'outDir' será o diretório com os arquivos convertidos em js.
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_3_VZXWmS07H.png" />
 
-Apesar do TSC ser essencial para a aplicação, ele não será utilizado no momento de desenvolvimento. Ao invés do TSC, utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades como compilação e live Reloader.
+E aproveitando, já vamos fazer outra configuração que usaremos lá na frente, quando criarmos os models. Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata".
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_n8PVmUF0J.png" />
+
+Outra configuração que já podemos adiantar é deixar false a propriedade "strictPropertyInitialization", para evitar um conflito na criação das variáveis nos models.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_2_xlMcSjZV1.png" />
+
 
 ## Configuração do TS-Node-DEV
 O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fase de desenvolvimento, o TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). (O TS-Node-Dev também permite o uso de decorators, algo que veremos mais pra frente quando começarmos a codar). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev e o TSC. 
@@ -54,17 +58,17 @@ Nessa aplicação temos basicamente duas entidades: agendamentos e usuários.
 
 Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
 
-1. Rotas de agendamento: cria um novo agendamento e lista todos os agendamentos.
-2. Model de agendamento: teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-3. Repositório de agendamento: procura no banco de dados agendamentos com a data selecionada e retorna.
-4. Service de agendamento: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+**1. Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
+**2. Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
+**3. Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
+**4. Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 Depois, criaremos tudo relacionado a entidade usuários, que consiste na criação de:
 
-1. Rotas de usuários: cria um novo usuário e permite o upload de um avatar.
-2. Model de usuários: teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
-3. Repositório de usuários: procura no banco de dados agendamentos com a data selecionada e retorna.
-4. Service de usuários: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+**1. Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
+**2. Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
+**3. Repositório de usuários:** procura no banco de dados agendamentos com a data selecionada e retorna.
+**4. Service de usuários:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 ## Entidade: Agendamentos
 
@@ -89,17 +93,11 @@ import AppointmentsRepository from '../repositories/AppointmentsRepository'; // 
 import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o service de appointments
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a autenticação do JWT token
 ```
-
-Abaixo, eu crio uma variável que vai conter o método de rotas, para usarmos no código.
-
-```ts
-const appointmentsRouter = Router();
-```
-    
-E depois, colocamos o middleware de Autenticação para ser usada em todas as rotas de agendamento seguintes.
+Depois armazenamos em uma variável o método de rotas e incluímos o middleware de autenticação.
 
 ```ts
-appointmentsRouter.use(ensureAuthenticated); // aplica o middleware em todas as rotas de agendamentos
+const appointmentsRouter = Router(); // variável que vai conter o método de rotas
+appointmentsRouter.use(ensureAuthenticated); //  middleware de Autenticação para ser usada em todas as rotas de agendamento seguintes.
 ```
 
 Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos.
@@ -141,7 +139,7 @@ Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment
 O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
 Ou seja, nessa aplicação, o model de Appointment é nada mais nada menos que o formato que todo agendamento terá no banco de dados.
 
-As primeiras linhas, vamos importar os métodos do typeorm e [...] 
+As primeiras linhas, vamos importar os métodos do typeorm que informam que essa model está relacionada a uma tabela do banco de dados. Depois logo abaixo, vamos informar os formato de cada coluna da tabela 'appointments'.
 
 ```ts
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
@@ -256,7 +254,42 @@ export default CreateAppointmentService; // exporta o service de appointment
 ## Entidade: Usuários
 
 ### 1. Criação de Rotas de Usuários
+
 ### 2. Criação do Model do Usuários
+
+Para a model do usuário, dentro da pasta 'models' vamos criar um  arquivo chamado User.ts. Nessa aplicação, o model de User é nada mais nada menos que o formato que todo user terá no banco de dados. Através do @Entity('users') eu indico que ele será armazenado na tabela users do banco de dados. Da mesma forma que nos agendamentos, vamos importar nas primeiras linhas os métodos do typeorm e depois, informar os formato de cada coluna da tabela.
+
+```ts
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+
+@Entity('users') // indica que o model vai ser armazenado dentro da tabela 'users'
+class User {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    name: string;
+
+    @Column()
+    email: string;
+
+    @Column()
+    password: string;
+
+    @Column()
+    avatar: string;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
+}
+
+export default User;
+```
+
+
 ### 3. Criação do Repositório de Usuários
 ### 4. Criação do Service de Usuários
 
