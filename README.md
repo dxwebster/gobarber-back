@@ -113,8 +113,8 @@ Depois, criaremos tudo relacionado a entidade usuários, criando:
 
 - **Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
 - **Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
-- **Repositório de usuários:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **Service de usuários:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **Repositório de usuários:** ????
+- **Service de usuários:** ????
 
 ## Entidade: Agendamentos
 
