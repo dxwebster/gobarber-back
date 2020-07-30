@@ -13,6 +13,8 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 Abaixo você vai encontrar todas a informações de como criar essa aplicação do zero.
 Primeiro passo é instalar o Node: https://nodejs.org/en/
 
+# Primeiras configurações
+
 ## Instalação das bibliotecas
 
 Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
@@ -46,12 +48,17 @@ O TS-Node-Dev será usado durante o desenvolvimento da aplicação. Durante a fa
 
 Para iniciar o servidor, executar `yarn dev:server`
 
+# Primeiros códigos
+Nosso aplicativo consiste no cadastro de usuários que poderão fazer um agendamento de um horário com um cabeleireiro (por ser um prestador de serviço, chamaremos de 'provider'). Portanto, vamos começar criando todo o processo de agendamento, que consiste em na criação de:
+
+- Duas Rotas de agendamento: criar um novo agendamento e listar todos os agendamentos.
+- Model de agendamento: teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
+- Repositório de agendamento: procura no banco de dados agendamentos com a data selecionada e retorna.
+- Service de agendamento: que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 ## Criação de Rotas de Agendamentos
 
-Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro.
-Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição, devolver uma resposta e após isso, devolver uma resposta.
-Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'.
+Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
 Para lidar com datas e horários, vamos instalar uma dependência chamada Date-fns: `yarn date-fns`. Ela vai converter uma string enviada pelo json, para um  formato date() nativo do javascript.
 
@@ -174,7 +181,7 @@ class AppointmentsRepository extends Repository<Appointment>{
         const findAppointment =  await this.findOne({
             where: { date },
         });
-
+        
         return findAppointment || null; // retorna o que encontrou ou retorna nulo
     }
 }
