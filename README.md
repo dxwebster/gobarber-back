@@ -7,11 +7,55 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 * Express
 * Typescript
 * Insomnia
+* TypeORM
+* Docker
+* Postgres
+* DBeaver
+* WSL2
 
-# Primeiras configurações
-Precisamos preparar o ambiente de desenvolvimento dessa aplicação. Nesse projeto, teremos todo o back-end em formato API Rest, ou seja, vamos trabalhar com entidades e rotas para requisições, models, repositórios e services. Para começarmos, o Node e o Yarn já devem estar instalados. 
+# 🖥 Instalação e Configuração de Softwares
 
-## Instalação das bibliotecas
+## Docker
+
+O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
+Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
+
+No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
+Para instalar o Docker no Windows Home, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
+
+## Postgres
+
+Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
+- Nome da imagem: gostack_postgres
+- Password: docker
+- Porta do container: 5432 
+- Porta do sistema: 5432 (verificar antes se a porta está disponível)
+- Banco de dados: Postgres
+
+Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
+
+Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
+
+Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
+É possível fazer isso também pelo dashboard do Docker Desktop.
+
+## DBeaver
+
+O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
+
+- Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
+
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
+
+- Agora vamos criar o banco de dados, conforme os passos a seguir:
+<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" />
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
+
+
+# 📚 Instalação das bibliotecas
+O Node e o Yarn já devem estar instalados. 
 
 Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
@@ -27,7 +71,12 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
 **Instalar o TS-Node-DEV**: `yarn add ts-node-dev -D`
 
+**Instalação do TypeORM e driver do postgres** `yarn add typeorm pg`
+
+**Instalação de uma dependência do typescript para sintaxe de decorators** `yarn add reflect-metadata`
+
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
+
 
 ## Configurações do TSC
 
@@ -50,7 +99,8 @@ Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápid
 
 A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
 
-# Primeiros códigos
+
+# ✏ Primeiros códigos
 
 Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um horário com um cabeleireiro (providers), temos então basicamente duas entidades: agendamentos e usuários. Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
 
@@ -72,7 +122,7 @@ Depois, criaremos tudo relacionado a entidade usuários, criando:
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
-Para lidar com datas e horários, vamos instalar uma dependência chamada Date-fns: `yarn date-fns`. Ela vai converter uma string enviada pelo json, para um  formato date() nativo do javascript.
+Para lidar com datas e horários, vamos instalar uma dependência chamada date-fns: `yarn date-fns`. Com o método parseISO() o date-fns converte uma string enviada pelo json, para um formato date() nativo do javascript.
 
 As primeiras linhas, faremos as importações de dependências:
     
@@ -85,18 +135,18 @@ import { getCustomRepository } from 'typeorm'; // importa o custom repository do
 Logo abaixo, importaremos os arquivos de Repositório e Service que criamos para os agendamentos e a middleware de Autenticação.
 
 ```ts
-import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositorio de appointments
-import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o service de appointments
-import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a autenticação do JWT token
+import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o Repositorio de appointments
+import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o Service de appointments
+import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a Autenticação do JWT token
 ```
-Depois armazenamos em uma variável o método de rotas e incluímos o middleware de autenticação.
+Depois armazenamos em uma variável o método de rotas e incluímos o middleware de autenticação que será usada em todas as rotas de agendamento seguintes.
 
 ```ts
 const appointmentsRouter = Router(); // variável que vai conter o método de rotas
-appointmentsRouter.use(ensureAuthenticated); //  middleware de Autenticação para ser usada em todas as rotas de agendamento seguintes.
+appointmentsRouter.use(ensureAuthenticated); //  middleware de autenticação 
 ```
 
-Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos.
+Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos. Na rota de criação de agendamentos, utilizaremos o método parseISO que apenas transforma os dados, por isso, não há problema em deixa-lo aqui dentro da rota.
 
 ```ts
 // Rota que lista os appointments
@@ -111,7 +161,7 @@ appointmentsRouter.post('/', async (request, response) => {
     // faz a rota de método post para criar um novo appointmment
     const { provider_id, date } = request.body; // pega as informações vinda do corpo da requisição
 
-    const parsedDate = parseISO(date); // transformação de dados pode deixar na rota (parseISO: converte string de data com formato date nativo do js)
+    const parsedDate = parseISO(date); // transformação de dados pode deixar na rota
 
     const createAppointment = new CreateAppointmentService(); // a regra de negócio fica dentro do service
     const appointment = await createAppointment.execute({
@@ -198,7 +248,7 @@ export default AppointmentsRepository;
 
 Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'. O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
 
-Nas primeiras linhas, importaremos o Date-fns para lidar com as datas e o método de repositório do typeorm.
+Nas primeiras linhas, importaremos o 'date-fns' para lidar com as datas e o método de repositório do typeorm. O método 'startOfHour()' formata a hora para deixar sem minutos ou segundos.
 
 ```ts
 import { startOfHour } from 'date-fns'; // importa os métodos para lidar com datas
@@ -228,7 +278,7 @@ class CreateAppointmentService {
     public async execute({ date, provider_id }: RequestDTO): Promise<Appointment> {
         const appointmentsRepository = getCustomRepository(AppointmentsRepository);
 
-        const appointmentDate = startOfHour(date); // startOfHour: formata a hora sem minutos ou segundos //
+        const appointmentDate = startOfHour(date); 
 
         const findAppointmentInSameDate = await appointmentsRepository.findByDate(appointmentDate); //verifica se já tem um appointment na mesma data
         if (findAppointmentInSameDate){ // se encontrar o appointment na mesma data de um já existente retorna erro
@@ -245,7 +295,44 @@ class CreateAppointmentService {
 export default CreateAppointmentService; // exporta o service de appointment
 ```
 
+
+
 ## Entidade: Usuários
+
+
+
+### Migrations
+
+Criar uma pasta models
+Criar arquivo ormconfig.json
+
+```json
+{
+    "type": "postgres",
+    "host": "192.168.99.100",
+    "port": 5432,
+    "username": "postgres",
+    "password": "docker",
+    "database": "gostack_gobarber",
+    "entities": [
+        "./src/models/*.ts"
+    ],
+    "migrations":[
+        "./src/database/migrations/*.ts"
+    ],
+    "cli": {
+        "migrationsDir":"./src/database/migrations"
+    }
+ }
+```
+
+# Continuar aqui Cadastro de Usuários > Model e migration de usuários
+# Continuar aqui Cadastro de Usuários > Model e migration de usuários
+# Continuar aqui Cadastro de Usuários > Model e migration de usuários
+
+
+
+
 
 ### 1. Criação de Rotas de Usuários
 
@@ -295,79 +382,10 @@ export default User;
 # Criação do banco de dados
 Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
 
-## 🚀 Tecnologias utilizadas
-O banco de dados foi desenvolvido utilizando as seguintes tecnologias
-* NodeJS
-* Docker
-* DBeaver
-* Postgres
-* WSL2
 
-## Instalação e configuração do Docker
 
-O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
-Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
 
-No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
-Para instalar o Docker no Windows Home, seguir este tutorial: https://medium.com/@gmusumeci/linux-on-windows-totally-how-to-install-wsl-1-and-wsl-2-307c9dd38a36
 
-## Criação de um conteiner para o Postgres
-
-Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco de dados Postgres, com as seguintes informações:
-- Nome da imagem: gostack_postgres
-- Password: docker
-- Porta do container: 5432 
-- Porta do sistema: 5432 (verificar antes se a porta está disponível)
-- Banco de dados: Postgres
-
-Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
-
-Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
-
-Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
-É possível fazer isso também pelo dashboard do Docker Desktop.
-
-## Instalação e Configuração do DBeaver
-
-O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
-
-- Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
-
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
-
-- Agora vamos criar o banco de dados, conforme os passos a seguir:
-<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" />
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
-
-## Instalação do TypeORM
-
-Instalação do TypeORM e driver do postgres `yarn add typeorm pg`
-
-Instalação de uma dependência do typescript `yarn add reflect-metadata`
-
-Criar arquivo ormconfig.json
-
-```json
-{
-    "type": "postgres",
-    "host": "192.168.99.100",
-    "port": 5432,
-    "username": "postgres",
-    "password": "docker",
-    "database": "gostack_gobarber",
-    "entities": [
-        "./src/models/*.ts"
-    ],
-    "migrations":[
-        "./src/database/migrations/*.ts"
-    ],
-    "cli": {
-        "migrationsDir":"./src/database/migrations"
-    }
- }
-```
 
 Criar pasta database com o index.ts que cria a conexão
 
@@ -431,3 +449,17 @@ Para criar a tabela no banco de dados: `yarn typeorm migration:run`
 O terminal vai exibir as querys que foram executadas.
 
 <img src="https://ik.imagekit.io/dxwebster/Untitled__2__Yg5VpH3Yiq.png" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
