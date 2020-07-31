@@ -50,9 +50,7 @@ O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dad
 - Username: postgres
 - Passwaord: docker (mesma do container criado no docker)
 
-E na aba PostgreSQL, selecionar 'Show all databases'.
-
-- Para criar criar o banco de dados, seguir os passos a seguir:
+E na aba PostgreSQL, selecionar 'Show all databases'. Para criar criar o banco de dados, seguir os passos a seguir:
 
 | <img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" /> |  <img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" /> |
 |----------|----------|
@@ -253,8 +251,9 @@ export default Appointment;
 
 ### 3. Criação do Repositório de Agendamentos
 
-Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
-O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação.  Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
+Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'. O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação. 
+
+Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
 
 Nas primeiras linhas, vamos importar os métodos do typeorm que vamos utilizar e também o model Appointment que já criamos anteriormente.
 Logo abaixo, criaremos o repositório com nosso novo método 'findByDate()'.
@@ -276,9 +275,6 @@ class AppointmentsRepository extends Repository<Appointment>{
 
 export default AppointmentsRepository;
 ```
-
-
-
 
 ### 4. Criação do Service de Agendamentos
 
@@ -362,37 +358,49 @@ const appointmentsRouter = Router(); // variável que vai conter o método de ro
 appointmentsRouter.use(ensureAuthenticated); //  middleware de autenticação 
 ```
 
-Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos. Na rota de criação de agendamentos, utilizaremos o método parseISO que apenas transforma os dados, por isso, não há problema em deixa-lo aqui dentro da rota.
+Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos. Primeiro temos a rota para listar os agendamentos, que utiliza o método get().
+Com a função find() eu busco no repositório os agendamentos e retorno.
 
 ```ts
 // Rota que lista os appointments
 appointmentsRouter.get('/', async (request, response) => {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+    
+    // faço a busca utilizando o repositório
     const appointments = await appointmentsRepository.find();
+    
+    // retorno a lista de agendamentos
     return response.json(appointments);
 });
+```
+Na rota de criação de agendamentos, utilizamos o método post(). Podemos notar que utilizamos um método parseISO para  transformar a data em um formato nativo do js. Como esse método apenas transforma os dados, não há problema em deixá-lo aqui dentro da rota. Essa rota pega os dados do corpo da requisição com o request.body, depois converte a data em formato .js e logo abaixo já executamos o service (regra de negócio) pela função execute(). O retorno é o agendamento criado.
 
+```ts
 // Rota que cria novos appointments
 appointmentsRouter.post('/', async (request, response) => {
-    // faz a rota de método post para criar um novo appointmment
-    const { provider_id, date } = request.body; // pega as informações vinda do corpo da requisição
-
-    const parsedDate = parseISO(date); // transformação de dados pode deixar na rota
-
-    const createAppointment = new CreateAppointmentService(); // a regra de negócio fica dentro do service
+    
+    // dados do corpo da requisição
+    const { provider_id, date } = request.body;
+    
+    //conversão da data de json para .js
+    const parsedDate = parseISO(date); 
+    
+    // execução da regra de negócio (service)
+    const createAppointment = new CreateAppointmentService();     
     const appointment = await createAppointment.execute({
         date: parsedDate,
         provider_id,
-    }); // executa o service
+    }); 
 
-    return response.json(appointment); // retorna o appointment
+    // retorna o appointment criado
+    return response.json(appointment);
 });
 ```
 
 E no final, exportamos as rotas
 
 ```ts
-export default appointmentsRouter; // exporta a rota
+export default appointmentsRouter; 
 ```
 
 
@@ -409,12 +417,8 @@ Agora, criaremos tudo relacionado a entidade usuários, criando:
 - **Service de usuários:** ????
 
 
+### 1. Criação da Tabela do Usuários
 
-
-
-
-
-### 1. Criação de Rotas de Usuários
 
 ### 2. Criação do Model do Usuários
 
@@ -453,27 +457,9 @@ export default User;
 
 ### 3. Criação do Repositório de Usuários
 
-
 ### 4. Criação do Service de Usuários
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### 5. Criação das Rotas de Usuários
 
 
 
