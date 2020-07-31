@@ -34,7 +34,7 @@ Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco 
 
 Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
 
-Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
+Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o Dashboard do docker, que mostrará seu container criado.
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" width= 550/>
 
@@ -50,10 +50,8 @@ O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dad
 - Username: postgres
 - Passwaord: docker (mesma do container criado no docker)
 
-E na aba PostgreSQL, selecionar 'Show all databases'. Para criar criar o banco de dados, seguir os passos a seguir:
-
-| <img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" /> |  <img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" /> |
-|----------|----------|
+E na aba PostgreSQL, selecionar 'Show all databases'. Clicar em Finish para criar.
+Agora para criar o banco de dados, localizar o postgres no lado esquerdo da janela, clicar com o botão direito e selecionar Criar > Banco de Dados. Colocar o nome 'gostack_gobarber' e dar Ok.
 
 
 # 📚 Instalação das bibliotecas
