@@ -46,10 +46,10 @@ Para iniciar ou encerrar a execução de um container, basta executar os comando
 O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
 
 - Ao abrir o software, selecionar PostGreSQL e colocar as seguintes informações:
-Host: localhost
-Database: postgres
-Username: postgres
-Passwaord: docker (mesma do container criado no docker)
+- Host: localhost
+- Database: postgres
+- Username: postgres
+- Passwaord: docker (mesma do container criado no docker)
 
 E na aba PostgreSQL, selecionar 'Show all databases'.
 
