@@ -150,13 +150,13 @@ Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na
 - **2. Model de agendamentos:** os dados de agendamento terão os seguintes formatos:
     - id do agendamento (chave primária)
     - id do provider (chave estrangeira que vai se relacionar com a tabela de users)
-    - data do agendamento (Timestamp com time zone)
+    - data do agendamento (Date)
     - data de criação (Date)
     - data de atualização (Date)
     
 - **3. Repositório de agendamentos:** procurar no banco de dados agendamentos com a data selecionada e retorna.
 - **4. Service de agendamentos:** verificar se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
-- **5. Rotas de agendamentos:** teremos duas principais rotas relacionadas aos agendamentos:
+- **5. Rotas de agendamentos:** teremos duas principais rotas:
     - criar um novo agendamento
     - listar todos os agendamentos.
 
