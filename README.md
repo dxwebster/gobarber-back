@@ -93,24 +93,23 @@ Outra configuração que já podemos adiantar é setar a propriedade "strictProp
 
 ## Configuração do TS-Node-DEV
 
-Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar o script para rodar o servidor pelo TS-Node-Dev e também já vamos aproveitar para criar um script que indica a utilização do typescript no TypeORM. 
+Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar o script para rodar o servidor pelo TS-Node-Dev e também já vamos aproveitar para criar um script de criação de migrations pelo TypeORM. 
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_2_kFcSZaJru.png" />
 
 A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
 E quando formos criar nossas migrations, utilizaremos o comando `yarn typeorm [comandos de migrations]`
 
-## Configuração do TypeORM
+## Configurações do TypeORM
 
-Na  pasta src, criar uma pasta 'database' e um arquivo index.ts. Esse arquivo será responsável pela nossa conexão com o banco de dados. Aúnica coisa que faremos é importar uma função 'createConnection()' do TypeORM que procura no meu projeto um arquivo 'ormconfig.json' para fazer a conexão com o banco de dados.
+Na pasta src, criar uma pasta 'database' e um arquivo index.ts. Esse arquivo será responsável pela nossa conexão com o banco de dados. A única coisa que faremos é importar uma função 'createConnection()' do TypeORM que procura no meu projeto um arquivo 'ormconfig.json' para fazer a conexão com o banco de dados.
 
 ```ts
-import { createConnection } from 'typeorm'; // procura o arquivo ormconfig.json para encontrar as configurações de conexão com bd
+import { createConnection } from 'typeorm'; 
 
 createConnection();
 ```
-
-Agora na raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as informações que o TypeORM precisa para conectar no banco de dados. Além disso, já vamos fazer algumas configurações sobre as migrations, que criaremos mais pra frente.
+Na mesma pasta 'database' vamos criar uma subpasta 'migrations'. As migrations vão servir como um histórico do banco de dados. Agora raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as informações que o TypeORM precisa para conectar no banco de dados e já vamos indicar também o caminho da nossa pasta 'migrations'.
 
 ```json
 {
@@ -132,31 +131,32 @@ Agora na raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as info
  }
 ```
 
-## Migrations
+# ✏ Primeiros códigos
+
+Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um horário com um cabeleireiro (providers), temos então basicamente duas entidades: agendamentos e usuários.
+
+## Entidade: Agendamentos
+
+Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na criação de 5 itens:
+
+1- **Tabela de agendamento:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
+2- **Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
+3- **Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
+4- **Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
+5- **Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 
+## Criação da Tabela de Agendamento
 
+Nosso banco de dados terá duas tabelas principais: agendamentos e usuários (appointments e users). Vamos criar a primeira migration que vai ser responsável pela criação da tabela de agendamentos no banco de dados. O comando abaixo vai criar o arquivo 'CreateAppointments.ts' na pasta 'migrations'.
 
-Criar pasta database com o index.ts que cria a conexão
+`yarn typeorm migration:create -n CreateAppointments` 
 
-```tsx
-import { createConnection } from 'typeorm'; // procura o arquivo ormconfig.json para encontrar as configurações de conexão com bd
+Essa migration 'CreateAppointments' terá a seguinte estrutura: u 'up()' para criar a tabela e o 'down(), que exclui essa mesma tabela, caso for necessário. 
+Na primeira linha, já temos a importação dos os métodos do TypeORM que permitem a execução da migration e acrescentaremos o método 'Table' para criação da tabela. Em seguida temos n
 
-createConnection();
-```
-
-No package.json, criar um script para criação das tabelas (migrations)
-
-<img src="https://ik.imagekit.io/dxwebster/Untitled__1__ih3Ecp8vR.png" />
-
-Dentro da pasta database, criar pasta migrations. (As migrations servem como um historico de banco de dados, para manter tudo na  mesma versão. É bom qdo tem vários desenvolvedores.)
-
-Criar tabela CreateAppointments `yarn typeorm migration:create -n CreateAppointments`
-
-Esse comando vai criar um arquivo dentro da pasta migrations. Ela vai criar uma estrutura em que se poderá criar uma tabela (up) e excluir (down) caso for necessário. Vamos criar as colunas da nossa tabela:
-
-```tsx
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+```ts
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export default class CreateAppointments1594855599794 implements MigrationInterface {
 
@@ -203,26 +203,7 @@ O terminal vai exibir as querys que foram executadas.
 
 
 
-
-# ✏ Primeiros códigos
-
-Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um horário com um cabeleireiro (providers), temos então basicamente duas entidades: agendamentos e usuários. Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
-
-- **Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
-- **Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-- **Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
-
-Depois, criaremos tudo relacionado a entidade usuários, criando:
-
-- **Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
-- **Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
-- **Repositório de usuários:** ????
-- **Service de usuários:** ????
-
-## Entidade: Agendamentos
-
-### 1. Criação de Rotas de Agendamentos
+### Criação de Rotas de Agendamentos
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
@@ -283,7 +264,7 @@ E no final, exportamos as rotas
 export default appointmentsRouter; // exporta a rota
 ```
 
-### 2. Criação do Model do Agendamento
+### Criação do Model do Agendamento
 
 Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts.
 O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
@@ -322,7 +303,7 @@ class Appointment {
 export default Appointment;
 ```
 
-### 3. Criação do Repositório de Agendamentos
+### Criação do Repositório de Agendamentos
 
 Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
 O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação.  Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
@@ -348,7 +329,7 @@ class AppointmentsRepository extends Repository<Appointment>{
 export default AppointmentsRepository;
 ```
 
-### 4. Criação do Service de Agendamentos
+### Criação do Service de Agendamentos
 
 Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'. O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
 
@@ -403,14 +384,13 @@ export default CreateAppointmentService; // exporta o service de appointment
 
 ## Entidade: Usuários
 
+Agora, criaremos tudo relacionado a entidade usuários, criando:
 
-
-### Migrations
-
-Para criar as tabelas no banco de dados, vamos utilizar as migrations. Dentro da pasta database, vamos criar uma pasta 'migrations' e executar o comando:
-`yarn typeorm migration:create -n CreateUsers`.
-
-
+- **Tabela de usuários:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
+- **Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
+- **Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
+- **Repositório de usuários:** ????
+- **Service de usuários:** ????
 
 
 
