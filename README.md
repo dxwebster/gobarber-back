@@ -93,14 +93,15 @@ Outra configuração que já podemos adiantar é setar a propriedade "strictProp
 
 ## Configuração do TS-Node-DEV
 
-Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev. 
+Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar o script para rodar o servidor pelo TS-Node-Dev e também já vamos aproveitar para criar um script que indica a utilização do typescript no TypeORM. 
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_5_R5bIc3m1c.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_2_kFcSZaJru.png" />
 
 A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
-
+E quando formos criar nossas migrations, utilizaremos o comando `yarn typeorm [comandos de migrations]`
 
 ## Configuração do TypeORM
+
 Na  pasta src, criar uma pasta 'database' e um arquivo index.ts. Esse arquivo será responsável pela nossa conexão com o banco de dados. Aúnica coisa que faremos é importar uma função 'createConnection()' do TypeORM que procura no meu projeto um arquivo 'ormconfig.json' para fazer a conexão com o banco de dados.
 
 ```ts
@@ -131,7 +132,74 @@ Agora na raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as info
  }
 ```
 
-## Configuração da DataBase
+## Migrations
+
+
+
+
+Criar pasta database com o index.ts que cria a conexão
+
+```tsx
+import { createConnection } from 'typeorm'; // procura o arquivo ormconfig.json para encontrar as configurações de conexão com bd
+
+createConnection();
+```
+
+No package.json, criar um script para criação das tabelas (migrations)
+
+<img src="https://ik.imagekit.io/dxwebster/Untitled__1__ih3Ecp8vR.png" />
+
+Dentro da pasta database, criar pasta migrations. (As migrations servem como um historico de banco de dados, para manter tudo na  mesma versão. É bom qdo tem vários desenvolvedores.)
+
+Criar tabela CreateAppointments `yarn typeorm migration:create -n CreateAppointments`
+
+Esse comando vai criar um arquivo dentro da pasta migrations. Ela vai criar uma estrutura em que se poderá criar uma tabela (up) e excluir (down) caso for necessário. Vamos criar as colunas da nossa tabela:
+
+```tsx
+import {MigrationInterface, QueryRunner, Table} from "typeorm";
+
+export default class CreateAppointments1594855599794 implements MigrationInterface {
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.createTable(
+            new Table({
+                name: 'appointments',
+                columns: [
+                    {
+                        name: 'id',
+                        type: 'varchar',
+                        isPrimary: true,
+                        generationStrategy: 'uuid',
+                        default: 'uuid_generate_v4()',
+                    },
+                    {
+                        name:  'provider',
+                        type: 'varchar',
+                        isNullable: false,
+                    },
+                    {
+                        name: 'date',
+                        type: 'timestamp with time zone',
+                        isNullable: false,
+                    }
+                ]
+            })
+        );
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable('appointments');
+    }
+
+}
+```
+
+Para criar a tabela no banco de dados: `yarn typeorm migration:run`
+
+O terminal vai exibir as querys que foram executadas.
+
+<img src="https://ik.imagekit.io/dxwebster/Untitled__2__Yg5VpH3Yiq.png" />
+
 
 
 
@@ -395,76 +463,10 @@ export default User;
 
 
 
-# Criação do banco de dados
-Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
 
 
 
 
-
-
-Criar pasta database com o index.ts que cria a conexão
-
-```tsx
-import { createConnection } from 'typeorm'; // procura o arquivo ormconfig.json para encontrar as configurações de conexão com bd
-
-createConnection();
-```
-
-No package.json, criar um script para criação das tabelas (migrations)
-
-<img src="https://ik.imagekit.io/dxwebster/Untitled__1__ih3Ecp8vR.png" />
-
-Dentro da pasta database, criar pasta migrations. (As migrations servem como um historico de banco de dados, para manter tudo na  mesma versão. É bom qdo tem vários desenvolvedores.)
-
-Criar tabela CreateAppointments `yarn typeorm migration:create -n CreateAppointments`
-
-Esse comando vai criar um arquivo dentro da pasta migrations. Ela vai criar uma estrutura em que se poderá criar uma tabela (up) e excluir (down) caso for necessário. Vamos criar as colunas da nossa tabela:
-
-```tsx
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
-
-export default class CreateAppointments1594855599794 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createTable(
-            new Table({
-                name: 'appointments',
-                columns: [
-                    {
-                        name: 'id',
-                        type: 'varchar',
-                        isPrimary: true,
-                        generationStrategy: 'uuid',
-                        default: 'uuid_generate_v4()',
-                    },
-                    {
-                        name:  'provider',
-                        type: 'varchar',
-                        isNullable: false,
-                    },
-                    {
-                        name: 'date',
-                        type: 'timestamp with time zone',
-                        isNullable: false,
-                    }
-                ]
-            })
-        );
-    }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('appointments');
-    }
-
-}
-```
-
-Para criar a tabela no banco de dados: `yarn typeorm migration:run`
-
-O terminal vai exibir as querys que foram executadas.
-
-<img src="https://ik.imagekit.io/dxwebster/Untitled__2__Yg5VpH3Yiq.png" />
 
 
 
