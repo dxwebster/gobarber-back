@@ -36,7 +36,7 @@ Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432
 
 Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" width= 550/>
 
 Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
 É possível fazer isso também pelo dashboard do Docker.
@@ -47,11 +47,12 @@ O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dad
 
 - Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
 
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
+<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png"  width= 550/>
 
 - Agora vamos criar o banco de dados, conforme os passos a seguir:
-<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" />
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
+
+| <img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" /> |  <img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" /> |
+|----------|----------|
 
 
 # 📚 Instalação das bibliotecas
