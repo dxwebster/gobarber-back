@@ -17,7 +17,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 
 ## Docker
 
-O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
+O Docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
 Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
 
 No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
@@ -39,7 +39,7 @@ Para verificar se o postgres está executando, basta executar o comando `docker 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
 
 Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
-É possível fazer isso também pelo dashboard do Docker Desktop.
+É possível fazer isso também pelo dashboard do Docker.
 
 ## DBeaver
 
@@ -98,6 +98,42 @@ Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápid
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_5_R5bIc3m1c.png" />
 
 A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
+
+
+## Configuração do TypeORM
+Na  pasta src, criar uma pasta 'database' e um arquivo index.ts. Esse arquivo será responsável pela nossa conexão com o banco de dados. Aúnica coisa que faremos é importar uma função 'createConnection()' do TypeORM que procura no meu projeto um arquivo 'ormconfig.json' para fazer a conexão com o banco de dados.
+
+```ts
+import { createConnection } from 'typeorm'; // procura o arquivo ormconfig.json para encontrar as configurações de conexão com bd
+
+createConnection();
+```
+
+Agora na raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as informações que o TypeORM precisa para conectar no banco de dados. Além disso, já vamos fazer algumas configurações sobre as migrations, que criaremos mais pra frente.
+
+```json
+{
+    "type": "postgres",
+    "host": "192.168.99.100",
+    "port": 5432,
+    "username": "postgres",
+    "password": "docker",
+    "database": "gostack_gobarber",
+    "entities": [
+        "./src/models/*.ts"
+    ],
+    "migrations":[
+        "./src/database/migrations/*.ts"
+    ],
+    "cli": {
+        "migrationsDir":"./src/database/migrations"
+    }
+ }
+```
+
+## Configuração da DataBase
+
+
 
 
 # ✏ Primeiros códigos
@@ -303,32 +339,12 @@ export default CreateAppointmentService; // exporta o service de appointment
 
 ### Migrations
 
-Criar uma pasta models
-Criar arquivo ormconfig.json
+Para criar as tabelas no banco de dados, vamos utilizar as migrations. Dentro da pasta database, vamos criar uma pasta 'migrations' e executar o comando:
+`yarn typeorm migration:create -n CreateUsers`.
 
-```json
-{
-    "type": "postgres",
-    "host": "192.168.99.100",
-    "port": 5432,
-    "username": "postgres",
-    "password": "docker",
-    "database": "gostack_gobarber",
-    "entities": [
-        "./src/models/*.ts"
-    ],
-    "migrations":[
-        "./src/database/migrations/*.ts"
-    ],
-    "cli": {
-        "migrationsDir":"./src/database/migrations"
-    }
- }
-```
 
-# Continuar aqui Cadastro de Usuários > Model e migration de usuários
-# Continuar aqui Cadastro de Usuários > Model e migration de usuários
-# Continuar aqui Cadastro de Usuários > Model e migration de usuários
+
+
 
 
 
