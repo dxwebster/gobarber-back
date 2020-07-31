@@ -110,6 +110,7 @@ import { createConnection } from 'typeorm';
 
 createConnection();
 ```
+
 Na mesma pasta 'database' vamos criar uma subpasta 'migrations'. As migrations vão servir como um histórico do banco de dados. Agora raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as informações que o TypeORM precisa para conectar no banco de dados e já vamos indicar também o caminho da nossa pasta 'migrations'.
 
 ```json
@@ -140,21 +141,29 @@ Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um hor
 
 Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na criação de 5 itens:
 
-- **Tabela de agendamento:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
-- **Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
-- **Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-- **Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **1. Tabela de agendamentos:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
+- **2. Model de agendamentos:**
+    - id do provider
+    - qual user está solicitando 
+    - data e horário selecionado
+    - a data de criação
+    - data de atualização do agendamento.
+    
+- **3. Repositório de agendamentos:** procura no banco de dados agendamentos com a data selecionada e retorna.
+- **4. Service de agendamentos:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **5. Rotas de agendamentos:**
+    - cria um novo agendamento
+    - lista todos os agendamentos.
 
 
-## Criação da Tabela de Agendamento
+## 1. Criação da Tabela de Agendamentos
 
-Nosso banco de dados terá duas tabelas principais: agendamentos e usuários (appointments e users). Vamos criar a primeira migration que vai ser responsável pela criação da tabela de agendamentos no banco de dados. O comando abaixo vai criar o arquivo 'CreateAppointments.ts' na pasta 'migrations'.
+Vamos criar a primeira migration que vai ser responsável pela criação da tabela de agendamentos (appointments) no banco de dados. O comando abaixo vai criar o arquivo 'CreateAppointments.ts' na pasta 'migrations'.
 
 `yarn typeorm migration:create -n CreateAppointments` 
 
-Essa migration 'CreateAppointments' terá a seguinte estrutura: u 'up()' para criar a tabela e o 'down(), que exclui essa mesma tabela, caso for necessário. 
-Na primeira linha, já temos a importação dos os métodos do TypeORM que permitem a execução da migration e acrescentaremos o método 'Table' para criação da tabela. Em seguida temos n
+Essa migration 'CreateAppointments' terá a seguinte estrutura: o 'up()' para criar a tabela e o 'down(), que exclui essa mesma tabela, caso for necessário. 
+Na primeira linha, já temos a importação dos os métodos do TypeORM que permitem a execução da migration e acrescentaremos o método 'Table' para criação da tabela. Em seguida utilizamos a função queryRunner() que vai rodar a query que executará a criação da tabela. Dentro dessas funções vamos escrever cada coluna da tabela e suas características.
 
 ```ts
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
@@ -195,16 +204,134 @@ export default class CreateAppointments1594855599794 implements MigrationInterfa
 }
 ```
 
-Para criar a tabela no banco de dados: `yarn typeorm migration:run`
-
-O terminal vai exibir as querys que foram executadas.
+Agora, para executar a migration e a criação da nossa tabela no banco de dados, vamos executar o comando: `yarn typeorm migration:run`. Assim que finalizar, o terminal vai exibir as querys que foram executadas, como o exemplo abaixo:
 
 <img src="https://ik.imagekit.io/dxwebster/Untitled__2__Yg5VpH3Yiq.png" />
 
+Quando abrimos o banco de dados, teremos nossa tabela 'appointments' criada e também uma tabela 'migrations' com nosso histórico de criação de migrations.
+
+### 2. Criação do Model do Agendamentos
+
+Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts. O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados. Ou seja, nessa aplicação, o model de Appointment é nada mais nada menos que o formato que todo agendamento terá no banco de dados.
+
+Nas primeiras linhas, vamos importar os métodos do typeorm que informam que essa model está relacionada a uma tabela do banco de dados. Depois logo abaixo, vamos informar os formato de cada coluna da tabela 'appointments'.
+
+```ts
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import User from './User';
+
+@Entity('appointments') // indica que o model vai ser armazenado dentro da tabela 'appointments'
+class Appointment {
+   
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    provider_id: string;
+
+    @ManyToOne(() => User) // muitos agendamentos para um único usuário
+    @JoinColumn({ name: 'provider_id' }) // qual a coluna que vai identicar o prestador desse agendamento
+    provider: User;
+
+    @Column('timestamp with time zone')
+    date: Date;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
+
+}
+
+export default Appointment;
+```
+
+
+### 3. Criação do Repositório de Agendamentos
+
+Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
+O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação.  Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
+
+Nas primeiras linhas, vamos importar os métodos do typeorm que vamos utilizar e também o model Appointment que já criamos anteriormente.
+Logo abaixo, criaremos o repositório com nosso novo método 'findByDate()'.
+
+```ts
+import { EntityRepository, Repository } from 'typeorm';
+import Appointment from '../models/Appointment';
+
+@EntityRepository(Appointment)
+class AppointmentsRepository extends Repository<Appointment>{
+    public async findByDate(date: Date): Promise<Appointment | null> {
+        const findAppointment =  await this.findOne({
+            where: { date },
+        });
+        
+        return findAppointment || null; // retorna o que encontrou ou retorna nulo
+    }
+}
+
+export default AppointmentsRepository;
+```
 
 
 
-### Criação de Rotas de Agendamentos
+
+### 4. Criação do Service de Agendamentos
+
+Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'. O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
+
+Nas primeiras linhas, importaremos o 'date-fns' para lidar com as datas e o método de repositório do typeorm. O método 'startOfHour()' formata a hora para deixar sem minutos ou segundos.
+
+```ts
+import { startOfHour } from 'date-fns'; // importa os métodos para lidar com datas
+import { getCustomRepository } from 'typeorm'; // importa o método de repositório customizado
+```
+
+Logo abaixo, vamos importar [...], o model e o repositório de Agendamentos.
+
+```ts
+import AppError from '../errors/AppError';
+import Appointment from '../models/Appointment'; // importa o model de appointment
+import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositório de appointment
+```
+
+Vamos criar um DTO [...]???
+
+```ts
+interface RequestDTO {
+    provider_id: string;
+    date: Date;
+}
+```
+O service é criado por meio de classe por meio do método publico 'execute()', que nesse caso significa a criação de um novo agendamento. O 'execute()' recebe dois parâmetros, a 'data selecionada' e o 'provider_id'. Dentro do execute, colocaremos a regra de criação do agendamento, ou seja, só pode ocorrer um  novo agendamento se não houver nenhum outro agendamento no mesmo horário. E para isso, utilizaremos nosso método 'findByDate()' criado no 'AppointmentsRepository'.
+
+```ts
+class CreateAppointmentService {
+    public async execute({ date, provider_id }: RequestDTO): Promise<Appointment> {
+        const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+
+        const appointmentDate = startOfHour(date); 
+
+        const findAppointmentInSameDate = await appointmentsRepository.findByDate(appointmentDate); //verifica se já tem um appointment na mesma data
+        if (findAppointmentInSameDate){ // se encontrar o appointment na mesma data de um já existente retorna erro
+            throw new AppError('This appointmnet is already booked');
+        }
+
+        const appointment = appointmentsRepository.create({ provider_id, date: appointmentDate }); // cria um novo appointment
+        await appointmentsRepository.save(appointment); // salva o registro no banco de dados
+
+        return appointment; // retorna o appointment feito
+    }
+}
+
+export default CreateAppointmentService; // exporta o service de appointment
+```
+
+
+
+
+### 5. Criação de Rotas de Agendamentos
 
 Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
@@ -265,121 +392,6 @@ E no final, exportamos as rotas
 export default appointmentsRouter; // exporta a rota
 ```
 
-### Criação do Model do Agendamento
-
-Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts.
-O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
-Ou seja, nessa aplicação, o model de Appointment é nada mais nada menos que o formato que todo agendamento terá no banco de dados.
-
-As primeiras linhas, vamos importar os métodos do typeorm que informam que essa model está relacionada a uma tabela do banco de dados. Depois logo abaixo, vamos informar os formato de cada coluna da tabela 'appointments'.
-
-```ts
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import User from './User';
-
-@Entity('appointments') // indica que o model vai ser armazenado dentro da tabela 'appointments'
-class Appointment {
-   
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
-    @Column()
-    provider_id: string;
-
-    @ManyToOne(() => User) // muitos agendamentos para um único usuário
-    @JoinColumn({ name: 'provider_id' }) // qual a coluna que vai identicar o prestador desse agendamento
-    provider: User;
-
-    @Column('timestamp with time zone')
-    date: Date;
-
-    @CreateDateColumn()
-    created_at: Date;
-
-    @UpdateDateColumn()
-    updated_at: Date;
-
-}
-
-export default Appointment;
-```
-
-### Criação do Repositório de Agendamentos
-
-Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
-O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação.  Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
-
-Nas primeiras linhas, vamos importar os métodos do typeorm que vamos utilizar e também o model Appointment que já criamos anteriormente.
-Logo abaixo, criaremos o repositório com nosso novo método 'findByDate()'.
-
-```ts
-import { EntityRepository, Repository } from 'typeorm';
-import Appointment from '../models/Appointment';
-
-@EntityRepository(Appointment)
-class AppointmentsRepository extends Repository<Appointment>{
-    public async findByDate(date: Date): Promise<Appointment | null> {
-        const findAppointment =  await this.findOne({
-            where: { date },
-        });
-        
-        return findAppointment || null; // retorna o que encontrou ou retorna nulo
-    }
-}
-
-export default AppointmentsRepository;
-```
-
-### Criação do Service de Agendamentos
-
-Na pasta 'src' criar uma pasta 'services' e um arquivo 'CreateAppointmentService.ts'. O service vai armazenar a regra de negócio da aplicação. No caso dessa aplicação, o service 'CreateAppointmentService' se encarregará de verificar se já existe algum agendamento na data selecionada e retornar uma resposta. Caso já tenha, vai retornar um "erro" com a mensagem 'This appointmnet is already booked', caso não tenha, permitirá que o agendamento prossiga e seja salvo no banco de dados.
-
-Nas primeiras linhas, importaremos o 'date-fns' para lidar com as datas e o método de repositório do typeorm. O método 'startOfHour()' formata a hora para deixar sem minutos ou segundos.
-
-```ts
-import { startOfHour } from 'date-fns'; // importa os métodos para lidar com datas
-import { getCustomRepository } from 'typeorm'; // importa o método de repositório customizado
-```
-
-Logo abaixo, vamos importar [...], o model e o repositório de Agendamentos.
-
-```ts
-import AppError from '../errors/AppError';
-import Appointment from '../models/Appointment'; // importa o model de appointment
-import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o repositório de appointment
-```
-
-Vamos criar um DTO [...]???
-
-```ts
-interface RequestDTO {
-    provider_id: string;
-    date: Date;
-}
-```
-O service é criado por meio de classe por meio do método publico 'execute()', que nesse caso significa a criação de um novo agendamento. O 'execute()' recebe dois parâmetros, a 'data selecionada' e o 'provider_id'. Dentro do execute, colocaremos a regra de criação do agendamento, ou seja, só pode ocorrer um  novo agendamento se não houver nenhum outro agendamento no mesmo horário. E para isso, utilizaremos nosso método 'findByDate()' criado no 'AppointmentsRepository'.
-
-```ts
-class CreateAppointmentService {
-    public async execute({ date, provider_id }: RequestDTO): Promise<Appointment> {
-        const appointmentsRepository = getCustomRepository(AppointmentsRepository);
-
-        const appointmentDate = startOfHour(date); 
-
-        const findAppointmentInSameDate = await appointmentsRepository.findByDate(appointmentDate); //verifica se já tem um appointment na mesma data
-        if (findAppointmentInSameDate){ // se encontrar o appointment na mesma data de um já existente retorna erro
-            throw new AppError('This appointmnet is already booked');
-        }
-
-        const appointment = appointmentsRepository.create({ provider_id, date: appointmentDate }); // cria um novo appointment
-        await appointmentsRepository.save(appointment); // salva o registro no banco de dados
-
-        return appointment; // retorna o appointment feito
-    }
-}
-
-export default CreateAppointmentService; // exporta o service de appointment
-```
 
 
 
