@@ -30,7 +30,7 @@ Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco 
 - Password: docker
 - Porta do container: 5432 
 - Porta do sistema: 5432 (verificar antes se a porta está disponível)
-- Banco de dados: Postgres
+- Banco de dados: postgres
 
 Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
 
@@ -45,11 +45,15 @@ Para iniciar ou encerrar a execução de um container, basta executar os comando
 
 O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
 
-- Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
+- Ao abrir o software, selecionar PostGreSQL e colocar as seguintes informações:
+Host: localhost
+Database: postgres
+Username: postgres
+Passwaord: docker (mesma do container criado no docker)
 
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png"  width= 550/>
+E na aba PostgreSQL, selecionar 'Show all databases'.
 
-- Agora vamos criar o banco de dados, conforme os passos a seguir:
+- Para criar criar o banco de dados, seguir os passos a seguir:
 
 | <img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" /> |  <img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" /> |
 |----------|----------|
