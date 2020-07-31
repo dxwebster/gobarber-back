@@ -140,11 +140,11 @@ Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um hor
 
 Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na criação de 5 itens:
 
-**Tabela de agendamento:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
-**Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
-**Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-**Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
-**Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **Tabela de agendamento:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
+- **Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
+- **Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
+- **Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
+- **Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
 
 
 ## Criação da Tabela de Agendamento
