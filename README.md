@@ -140,19 +140,25 @@ Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um hor
 
 Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na criação de 5 itens:
 
-- **1. Tabela de agendamentos:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
-- **2. Model de agendamentos:**
+- **1. Tabela de agendamentos:** a tabela terá 5 colunas
+    - id do agendamento
     - id do provider
-    - qual user está solicitando 
-    - data e horário selecionado
-    - a data de criação
-    - data de atualização do agendamento.
+    - data do agendamento
+    - data de criação
+    - data de atualização
     
-- **3. Repositório de agendamentos:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **4. Service de agendamentos:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
-- **5. Rotas de agendamentos:**
-    - cria um novo agendamento
-    - lista todos os agendamentos.
+- **2. Model de agendamentos:** os dados de agendamento terão os seguintes formatos:
+    - id do agendamento (chave primária)
+    - id do provider (chave estrangeira que vai se relacionar com a tabela de users)
+    - data do agendamento (Timestamp com time zone)
+    - data de criação (Date)
+    - data de atualização (Date)
+    
+- **3. Repositório de agendamentos:** procurar no banco de dados agendamentos com a data selecionada e retorna.
+- **4. Service de agendamentos:** verificar se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **5. Rotas de agendamentos:** teremos duas principais rotas relacionadas aos agendamentos:
+    - criar um novo agendamento
+    - listar todos os agendamentos.
 
 
 ## 1. Criação da Tabela de Agendamentos
@@ -165,7 +171,7 @@ Essa migration 'CreateAppointments' terá a seguinte estrutura: o 'up()' para cr
 Na primeira linha, já temos a importação dos os métodos do TypeORM que permitem a execução da migration e acrescentaremos o método 'Table' para criação da tabela. Em seguida utilizamos a função queryRunner() que vai rodar a query que executará a criação da tabela. Dentro dessas funções vamos escrever cada coluna da tabela e suas características.
 
 ```ts
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
 export default class CreateAppointments1594855599794 implements MigrationInterface {
 
@@ -176,20 +182,28 @@ export default class CreateAppointments1594855599794 implements MigrationInterfa
                 columns: [
                     {
                         name: 'id',
-                        type: 'varchar',
+                        type: 'uuid',
                         isPrimary: true,
                         generationStrategy: 'uuid',
                         default: 'uuid_generate_v4()',
                     },
                     {
-                        name:  'provider',
+                        name: 'provider',
                         type: 'varchar',
-                        isNullable: false,
                     },
                     {
                         name: 'date',
                         type: 'timestamp with time zone',
-                        isNullable: false,
+                    },
+                    {
+                        name: 'created_at',
+                        type: 'timestamp',
+                        default: 'now()',
+                    },
+                    {
+                        name: 'updated_at',
+                        type: 'timestamp',
+                        default: 'now()',
                     }
                 ]
             })
@@ -201,6 +215,7 @@ export default class CreateAppointments1594855599794 implements MigrationInterfa
     }
 
 }
+
 ```
 
 Agora, para executar a migration e a criação da nossa tabela no banco de dados, vamos executar o comando: `yarn typeorm migration:run`. Assim que finalizar, o terminal vai exibir as querys que foram executadas, como o exemplo abaixo:
