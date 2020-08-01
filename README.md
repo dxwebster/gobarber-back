@@ -138,7 +138,7 @@ Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um hor
 
 ## Entidade: Agendamentos
 
-Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na criação de 5 itens:
+Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento em 5 partes:
 
 - **1. Tabela de agendamentos:** a tabela terá 5 colunas
     - id do agendamento
@@ -154,11 +154,17 @@ Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento na
     - data de criação (Date)
     - data de atualização (Date)
     
-- **3. Repositório de agendamentos:** procurar no banco de dados agendamentos com a data selecionada e retorna.
-- **4. Service de agendamentos:** verificar se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
+- **3. Repositório de agendamentos:**
+    - procurar no banco de dados agendamentos com a data selecionada
+    - retornar o agendamento
+    
+- **4. Service de agendamentos:**
+    - verificar se já existe algum agendamento com a data selecionada
+    - permite ou não o agendamento
+    
 - **5. Rotas de agendamentos:** teremos duas principais rotas:
     - criar um novo agendamento
-    - listar todos os agendamentos.
+    - listar todos os agendamentos
 
 
 ## 1. Criação da Tabela de Agendamentos
