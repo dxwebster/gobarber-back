@@ -77,20 +77,6 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
-
-## Configurações do TSC
-Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores.  Entretanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
-
-Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_6A8paM9eZ.png" />
-
-Outra configuração que já podemos adiantar é setar a propriedade "strictPropertyInitialization" como 'false', para evitar um conflito na criação das variáveis nos models.
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
-
-Apesar disso, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo).
-
 ## Configuração de scripts de desenvolvimento
 No arquivo 'package.json', vamos configurar dois scripts: 
 - Rodar o servidor pelo TS-Node-Dev
@@ -100,6 +86,16 @@ No arquivo 'package.json', vamos configurar dois scripts:
 
 A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
 E quando formos criar nossas migrations, utilizaremos o comando `yarn typeorm [comandos de migrations]`
+
+## Configurações do TSC
+No arquivo 'tsconfig.json',  vamos configurar alguns recursos que utilizaremos no processo de desenvolvimento. 
+- Habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
+- Setar a propriedade "strictPropertyInitialization" como 'false', para evitar um conflito na criação das variáveis nos models.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_6A8paM9eZ.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
+
+Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Entretanto, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo).
 
 ## Configurações do TypeORM
 
