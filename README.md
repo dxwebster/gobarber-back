@@ -79,8 +79,7 @@ Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
 
 ## Configurações do TSC
-
-Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Apesar disso, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Portanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
+Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores.  Entretanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
 
 Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
 
@@ -90,10 +89,12 @@ Outra configuração que já podemos adiantar é setar a propriedade "strictProp
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
 
+Apesar disso, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo).
 
-## Configuração do TS-Node-DEV
-
-Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar o script para rodar o servidor pelo TS-Node-Dev e também já vamos aproveitar para criar um script de criação de migrations pelo TypeORM. 
+## Configuração de scripts de desenvolvimento
+No arquivo 'package.json', vamos configurar dois scripts: 
+- Rodar o servidor pelo TS-Node-Dev
+- Criar migrations pelo TypeORM
 
 <img src="https://ik.imagekit.io/dxwebster/Screenshot_2_kFcSZaJru.png" />
 
