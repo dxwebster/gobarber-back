@@ -17,7 +17,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 
 ## Docker
 
-O docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
+O Docker cria ambientes isolados, chamados de containers, onde vamos instalar nosso banco de dados Postgres.
 Ele cria subsistemas que não interfere diretamente no funcionamento da nossa máquina.
 
 No Windows Home, o Docker Desktop poderá ser instalado por meio do WSL2 (Windows Subsystem dor Linux), qu permite rodar o linux dentro do windows.
@@ -30,28 +30,28 @@ Já com o Docker instalado, vamos criar um conteiner que vai conter nosso banco 
 - Password: docker
 - Porta do container: 5432 
 - Porta do sistema: 5432 (verificar antes se a porta está disponível)
-- Banco de dados: Postgres
+- Banco de dados: postgres
 
 Executar `docker run --name gostack_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres`
 
-Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o dashboard do docker, que mostrará seu container criado.
+Para verificar se o postgres está executando, basta executar o comando `docker ps`, ou acessar o Dashboard do docker, que mostrará seu container criado.
 
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_1_ZIPo2y5F3.png" width= 550/>
 
 Para iniciar ou encerrar a execução de um container, basta executar os comandos `docker start [nome ou id do container]`ou `docker stop [nome ou id do container]`.
-É possível fazer isso também pelo dashboard do Docker Desktop.
+É possível fazer isso também pelo dashboard do Docker.
 
 ## DBeaver
 
-O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/).
+O DBeaver é uma ferramenta gratuita multiplataforma para acessar o banco de dados. Baixar o DBeaver [aqui](https://dbeaver.io/). Ao abrir o software, selecionar PostGreSQL e colocar as seguintes informações:
 
-- Ao abrir o software, selecionar PostGreSQL e colocar as informações igual o print abaixo (a senha é a mesma que colocamos quando instalamos o postgre pelo docker). E na aba PostgreSQL, selecionar 'Show all databases'.
+- Host: localhost
+- Database: postgres
+- Username: postgres
+- Passwaord: docker (mesma do container criado no docker)
 
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" />
-
-- Agora vamos criar o banco de dados, conforme os passos a seguir:
-<img src="https://ik.imagekit.io/dxwebster/Untitled_BPCJZbc7p.png" width="500" />
-<img src="https://ik.imagekit.io/dxwebster/Untitled_ydVAtVIbx.png" width="500" />
+E na aba PostgreSQL, selecionar 'Show all databases'. Clicar em Finish para criar.
+Agora para criar o banco de dados, localizar o postgres no lado esquerdo da janela, clicar com o botão direito e selecionar Criar > Banco de Dados. Colocar o nome 'gostack_gobarber' e dar Ok.
 
 
 # 📚 Instalação das bibliotecas
@@ -77,115 +77,161 @@ Criar uma pasta 'primeiro-projeto-node' que vai conter nossa aplicação.
 
 Criar uma nova pasta 'src'e um arquivo 'server.ts' dentro dessa pasta.
 
+## Configuração de scripts de desenvolvimento
+No arquivo 'package.json', vamos configurar dois scripts: 
+- Rodar o servidor pelo TS-Node-Dev
+- Criar migrations pelo TypeORM
 
-## Configurações do TSC
-
-Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Apesar disso, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Portanto, vamos configurar outros recursos utilizaremos no processo de desenvolvimento. No arquivo 'tsconfig.json':
-
-Vamos habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_6A8paM9eZ.png" />
-
-Outra configuração que já podemos adiantar é setar a propriedade "strictPropertyInitialization" como 'false', para evitar um conflito na criação das variáveis nos models.
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
-
-
-## Configuração do TS-Node-DEV
-
-Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo). No arquivo 'package.json', vamos configurar alguns scripts para rodar o TS-Node-Dev. 
-
-<img src="https://ik.imagekit.io/dxwebster/Screenshot_5_R5bIc3m1c.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_2_kFcSZaJru.png" />
 
 A partir de agora, para iniciar o servidor, basta executar `yarn dev:server`
+E quando formos criar nossas migrations, utilizaremos o comando `yarn typeorm [comandos de migrations]`
 
+## Configurações do TSC
+No arquivo 'tsconfig.json',  vamos configurar alguns recursos que utilizaremos no processo de desenvolvimento. 
+- Habilitar o "experimentalDecorators" e "emitDecoratorMetadata". Esse recurso permite o uso de decorators quando formos criar os models das entidades.
+- Setar a propriedade "strictPropertyInitialization" como 'false', para evitar um conflito na criação das variáveis nos models.
+
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_4_6A8paM9eZ.png" />
+<img src="https://ik.imagekit.io/dxwebster/Screenshot_3_aEMMCnGho.png" />
+
+Uma das principais funcionalidades do TSC é compilar nosso códgio ts e converter em javascript para que a aplicação possa rodar nos navegadores. Entretanto, ele não será utilizado como compilador no processo de desenvolvimento, mas apenas quando fizermos a build da aplicação. Na fase de desenvolvimento utilizaremos o TS-Node-Dev, uma solução mais rápida que possui muitas funcionalidades que o TSC. O TS-Node-Dev vai compilar nossos arquivos .ts (mesma função do TSC) e também reiniciar o projeto quando o arquivo é modificado (mesma função de um Nodemom por exemplo).
+
+## Configurações do TypeORM
+
+Na pasta src, criar uma pasta 'database' e um arquivo index.ts. Esse arquivo será responsável pela nossa conexão com o banco de dados. A única coisa que faremos é importar uma função 'createConnection()' do TypeORM que procura no meu projeto um arquivo 'ormconfig.json' para fazer a conexão com o banco de dados.
+
+```ts
+import { createConnection } from 'typeorm'; 
+
+createConnection();
+```
+
+Na mesma pasta 'database' vamos criar uma subpasta 'migrations'. As migrations vão servir como um histórico do banco de dados. Agora raiz do projeto, vamos criar arquivo 'ormconfig.json' e colocar as informações que o TypeORM precisa para conectar no banco de dados e já vamos indicar também o caminho da nossa pasta 'migrations'.
+
+```json
+{
+    "type": "postgres",
+    "host": "192.168.99.100",
+    "port": 5432,
+    "username": "postgres",
+    "password": "docker",
+    "database": "gostack_gobarber",
+    "entities": [
+        "./src/models/*.ts"
+    ],
+    "migrations":[
+        "./src/database/migrations/*.ts"
+    ],
+    "cli": {
+        "migrationsDir":"./src/database/migrations"
+    }
+ }
+```
 
 # ✏ Primeiros códigos
 
-Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um horário com um cabeleireiro (providers), temos então basicamente duas entidades: agendamentos e usuários. Portanto, vamos começar criando todo o processo de agendamento, que consiste na criação de:
-
-- **Rotas de agendamento:** cria um novo agendamento e lista todos os agendamentos.
-- **Model de agendamento:** teremos o id do provider, qual user está solicitando, a data e horário selecionado, a data de criação e data de atualização do agendamento. 
-- **Repositório de agendamento:** procura no banco de dados agendamentos com a data selecionada e retorna.
-- **Service de agendamento:** que verifica se já existe algum agendamento com a data selecionada e permite ou não o agendamento.
-
-Depois, criaremos tudo relacionado a entidade usuários, criando:
-
-- **Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
-- **Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
-- **Repositório de usuários:** ????
-- **Service de usuários:** ????
+Como nosso aplicativo consiste no cadastro de usuários e agendamentos de um horário com um cabeleireiro (providers), temos então basicamente duas entidades: agendamentos e usuários.
 
 ## Entidade: Agendamentos
 
-### 1. Criação de Rotas de Agendamentos
+Vamos começar lidando com os agendamentos. Podemos dividir o desenvolvimento em 5 partes:
 
-Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
-
-Para lidar com datas e horários, vamos instalar uma dependência chamada date-fns: `yarn date-fns`. Com o método parseISO() o date-fns converte uma string enviada pelo json, para um formato date() nativo do javascript.
-
-As primeiras linhas, faremos as importações de dependências:
+- **1. Tabela de agendamentos:** a tabela terá 5 colunas
+    - id do agendamento
+    - id do provider
+    - data do agendamento
+    - data de criação
+    - data de atualização
     
-```ts
-import { parseISO } from 'date-fns'; // importa os métodos para lidar com datas
-import { Router } from 'express'; // importa as rotas do express
-import { getCustomRepository } from 'typeorm'; // importa o custom repository do typeorm
-```
+- **2. Model de agendamentos:** os dados de agendamento terão os seguintes formatos:
+    - id do agendamento (chave primária)
+    - id do provider (chave estrangeira que vai se relacionar com a tabela de users)
+    - data do agendamento (Date)
+    - data de criação (Date)
+    - data de atualização (Date)
+    
+- **3. Repositório de agendamentos:**
+    - procurar no banco de dados agendamentos com a data selecionada
+    - retornar o agendamento
+    
+- **4. Service de agendamentos:**
+    - verificar se já existe algum agendamento com a data selecionada
+    - permite ou não o agendamento
+    
+- **5. Rotas de agendamentos:** teremos duas principais rotas:
+    - criar um novo agendamento
+    - listar todos os agendamentos
 
-Logo abaixo, importaremos os arquivos de Repositório e Service que criamos para os agendamentos e a middleware de Autenticação.
 
-```ts
-import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o Repositorio de appointments
-import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o Service de appointments
-import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a Autenticação do JWT token
-```
-Depois armazenamos em uma variável o método de rotas e incluímos o middleware de autenticação que será usada em todas as rotas de agendamento seguintes.
+## 1. Criação da Tabela de Agendamentos
 
-```ts
-const appointmentsRouter = Router(); // variável que vai conter o método de rotas
-appointmentsRouter.use(ensureAuthenticated); //  middleware de autenticação 
-```
+Vamos criar a primeira migration que vai ser responsável pela criação da tabela de agendamentos (appointments) no banco de dados. O comando abaixo vai criar o arquivo 'CreateAppointments.ts' na pasta 'migrations'.
 
-Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos. Na rota de criação de agendamentos, utilizaremos o método parseISO que apenas transforma os dados, por isso, não há problema em deixa-lo aqui dentro da rota.
+`yarn typeorm migration:create -n CreateAppointments` 
 
-```ts
-// Rota que lista os appointments
-appointmentsRouter.get('/', async (request, response) => {
-    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
-    const appointments = await appointmentsRepository.find();
-    return response.json(appointments);
-});
-
-// Rota que cria novos appointments
-appointmentsRouter.post('/', async (request, response) => {
-    // faz a rota de método post para criar um novo appointmment
-    const { provider_id, date } = request.body; // pega as informações vinda do corpo da requisição
-
-    const parsedDate = parseISO(date); // transformação de dados pode deixar na rota
-
-    const createAppointment = new CreateAppointmentService(); // a regra de negócio fica dentro do service
-    const appointment = await createAppointment.execute({
-        date: parsedDate,
-        provider_id,
-    }); // executa o service
-
-    return response.json(appointment); // retorna o appointment
-});
-```
-
-E no final, exportamos as rotas
+Essa migration 'CreateAppointments' terá a seguinte estrutura: o 'up()' para criar a tabela e o 'down(), que exclui essa mesma tabela, caso for necessário. 
+Na primeira linha, já temos a importação dos os métodos do TypeORM que permitem a execução da migration e acrescentaremos o método 'Table' para criação da tabela. Em seguida utilizamos a função queryRunner() que vai rodar a query que executará a criação da tabela. Dentro dessas funções vamos escrever cada coluna da tabela e suas características.
 
 ```ts
-export default appointmentsRouter; // exporta a rota
+import {MigrationInterface, QueryRunner, Table} from "typeorm";
+
+export default class CreateAppointments1594855599794 implements MigrationInterface {
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.createTable(
+            new Table({
+                name: 'appointments',
+                columns: [
+                    {
+                        name: 'id',
+                        type: 'uuid',
+                        isPrimary: true,
+                        generationStrategy: 'uuid',
+                        default: 'uuid_generate_v4()',
+                    },
+                    {
+                        name: 'provider_id',
+                        type: 'varchar',
+                    },
+                    {
+                        name: 'date',
+                        type: 'timestamp with time zone',
+                    },
+                    {
+                        name: 'created_at',
+                        type: 'timestamp',
+                        default: 'now()',
+                    },
+                    {
+                        name: 'updated_at',
+                        type: 'timestamp',
+                        default: 'now()',
+                    }
+                ]
+            })
+        );
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable('appointments');
+    }
+
+}
+
 ```
 
-### 2. Criação do Model do Agendamento
+Agora, para executar a migration e a criação da nossa tabela no banco de dados, vamos executar o comando: `yarn typeorm migration:run`. Assim que finalizar, o terminal vai exibir as querys que foram executadas, como o exemplo abaixo:
 
-Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts.
-O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados.
-Ou seja, nessa aplicação, o model de Appointment é nada mais nada menos que o formato que todo agendamento terá no banco de dados.
+<img src="https://ik.imagekit.io/dxwebster/Untitled__2__Yg5VpH3Yiq.png" />
 
-As primeiras linhas, vamos importar os métodos do typeorm que informam que essa model está relacionada a uma tabela do banco de dados. Depois logo abaixo, vamos informar os formato de cada coluna da tabela 'appointments'.
+Quando abrimos o banco de dados, teremos nossa tabela 'appointments' criada e também uma tabela 'migrations' com nosso histórico de criação de migrations.
+
+### 2. Criação do Model do Agendamentos
+
+Dentro da pasta 'src' criar uma pasta 'models' e um  arquivo chamado Appointment.ts. O model ou entidade da aplicação é o lugar que vamos setar o formato de um dado que será armazenado no banco de dados. Ou seja, nessa aplicação, o model de Appointment é nada mais nada menos que o formato que todo agendamento terá no banco de dados.
+
+Nas primeiras linhas, vamos importar os métodos do typeorm que informam que essa model está relacionada a uma tabela do banco de dados. Depois logo abaixo, vamos informar os formato de cada coluna da tabela 'appointments'.
 
 ```ts
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
@@ -218,10 +264,12 @@ class Appointment {
 export default Appointment;
 ```
 
+
 ### 3. Criação do Repositório de Agendamentos
 
-Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'.
-O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação.  Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
+Dentro da pasta src, vamos criar uma pasta 'repositories' e um arquivo 'AppointmentsRepository.ts'. O Repositório, nessa aplicação, pode ser definido como uma conexão do banco de dados e as rotas de agendamento. Com a utilização do TypeORM, já temos alguns métodos padrão que usamos para manipular o banco de dados, como por exemplo: 'create()', 'list()', 'remove()', 'update()', entre outros (consultar métodos de Repository). Entretanto, podemos criar nosso próprios métodos para atender às necessidades da nossa aplicação. 
+
+Na nossa aplicação, além de criar, listar ou remover agendamentos, precisamos de um método que possa encontrar no banco de dados um agendamento pela data. Assim, criaremos o método findByDate(). 
 
 Nas primeiras linhas, vamos importar os métodos do typeorm que vamos utilizar e também o model Appointment que já criamos anteriormente.
 Logo abaixo, criaremos o repositório com nosso novo método 'findByDate()'.
@@ -297,44 +345,96 @@ export default CreateAppointmentService; // exporta o service de appointment
 
 
 
-## Entidade: Usuários
 
+### 5. Criação de Rotas de Agendamentos
 
+Criar uma pasta 'routes' e dentro dela vamos criar a primeira rota para agendamento (appointments) de horários no cabeleireiro. Nosso arquivo de rota para agendamentos chamará 'appointments.routes.ts'. Os arquivos de rotas são responsáveis por receber a requisição, chamar outro arquivo para tratar a requisição e após isso devolver uma resposta.
 
-### Migrations
+Para lidar com datas e horários, vamos instalar uma dependência chamada date-fns: `yarn date-fns`. Com o método parseISO() o date-fns converte uma string enviada pelo json, para um formato date() nativo do javascript.
 
-Criar uma pasta models
-Criar arquivo ormconfig.json
-
-```json
-{
-    "type": "postgres",
-    "host": "192.168.99.100",
-    "port": 5432,
-    "username": "postgres",
-    "password": "docker",
-    "database": "gostack_gobarber",
-    "entities": [
-        "./src/models/*.ts"
-    ],
-    "migrations":[
-        "./src/database/migrations/*.ts"
-    ],
-    "cli": {
-        "migrationsDir":"./src/database/migrations"
-    }
- }
+As primeiras linhas, faremos as importações de dependências:
+    
+```ts
+import { parseISO } from 'date-fns'; // importa os métodos para lidar com datas
+import { Router } from 'express'; // importa as rotas do express
+import { getCustomRepository } from 'typeorm'; // importa o custom repository do typeorm
 ```
 
-# Continuar aqui Cadastro de Usuários > Model e migration de usuários
-# Continuar aqui Cadastro de Usuários > Model e migration de usuários
-# Continuar aqui Cadastro de Usuários > Model e migration de usuários
+Logo abaixo, importaremos os arquivos de Repositório e Service que criamos para os agendamentos e a middleware de Autenticação.
+
+```ts
+import AppointmentsRepository from '../repositories/AppointmentsRepository'; // importa o Repositorio de appointments
+import CreateAppointmentService from '../services/CreateAppointmentService'; // importa o Service de appointments
+import ensureAuthenticated from '../middlewares/ensureAuthenticated'; // importa  a Autenticação do JWT token
+```
+Depois armazenamos em uma variável o método de rotas e incluímos o middleware de autenticação que será usada em todas as rotas de agendamento seguintes.
+
+```ts
+const appointmentsRouter = Router(); // variável que vai conter o método de rotas
+appointmentsRouter.use(ensureAuthenticated); //  middleware de autenticação 
+```
+
+Feito isso, vamos criar duas rotas, a que lista os agendamentos, e a que cria novos agendamentos. Primeiro temos a rota para listar os agendamentos, que utiliza o método get().
+Com a função find() eu busco no repositório os agendamentos e retorno.
+
+```ts
+// Rota que lista os appointments
+appointmentsRouter.get('/', async (request, response) => {
+    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+    
+    // faço a busca utilizando o repositório
+    const appointments = await appointmentsRepository.find();
+    
+    // retorno a lista de agendamentos
+    return response.json(appointments);
+});
+```
+Na rota de criação de agendamentos, utilizamos o método post(). Podemos notar que utilizamos um método parseISO para  transformar a data em um formato nativo do js. Como esse método apenas transforma os dados, não há problema em deixá-lo aqui dentro da rota. Essa rota pega os dados do corpo da requisição com o request.body, depois converte a data em formato .js e logo abaixo já executamos o service (regra de negócio) pela função execute(). O retorno é o agendamento criado.
+
+```ts
+// Rota que cria novos appointments
+appointmentsRouter.post('/', async (request, response) => {
+    
+    // dados do corpo da requisição
+    const { provider_id, date } = request.body;
+    
+    //conversão da data de json para .js
+    const parsedDate = parseISO(date); 
+    
+    // execução da regra de negócio (service)
+    const createAppointment = new CreateAppointmentService();     
+    const appointment = await createAppointment.execute({
+        date: parsedDate,
+        provider_id,
+    }); 
+
+    // retorna o appointment criado
+    return response.json(appointment);
+});
+```
+
+E no final, exportamos as rotas
+
+```ts
+export default appointmentsRouter; 
+```
 
 
 
 
+## Entidade: Usuários
 
-### 1. Criação de Rotas de Usuários
+Agora, criaremos tudo relacionado a entidade usuários, criando:
+
+- **Tabela de usuários:** utilizando o typeorm e as migrations para manter o histórico do banco de dados
+- **Rotas de usuários:** cria um novo usuário e permite o upload de um avatar.
+- **Model de usuários:** teremos o id do user, seu nome, seu email, seu password, o avatar, a data de criação e data de atualização do agendamento. 
+- **Repositório de usuários:** ????
+- **Service de usuários:** ????
+
+
+### 1. Criação da Tabela do Usuários
+
 
 ### 2. Criação do Model do Usuários
 
@@ -373,93 +473,9 @@ export default User;
 
 ### 3. Criação do Repositório de Usuários
 
-
 ### 4. Criação do Service de Usuários
 
-
-
-
-# Criação do banco de dados
-Essa é a criação das primeiras funcionalidades do back-end da aplicação GoBarber, um serviço de agendamento de cabeleireiros. Aqui vamos trabalhar na criação do banco de dados.
-
-
-
-
-
-
-Criar pasta database com o index.ts que cria a conexão
-
-```tsx
-import { createConnection } from 'typeorm'; // procura o arquivo ormconfig.json para encontrar as configurações de conexão com bd
-
-createConnection();
-```
-
-No package.json, criar um script para criação das tabelas (migrations)
-
-<img src="https://ik.imagekit.io/dxwebster/Untitled__1__ih3Ecp8vR.png" />
-
-Dentro da pasta database, criar pasta migrations. (As migrations servem como um historico de banco de dados, para manter tudo na  mesma versão. É bom qdo tem vários desenvolvedores.)
-
-Criar tabela CreateAppointments `yarn typeorm migration:create -n CreateAppointments`
-
-Esse comando vai criar um arquivo dentro da pasta migrations. Ela vai criar uma estrutura em que se poderá criar uma tabela (up) e excluir (down) caso for necessário. Vamos criar as colunas da nossa tabela:
-
-```tsx
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
-
-export default class CreateAppointments1594855599794 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createTable(
-            new Table({
-                name: 'appointments',
-                columns: [
-                    {
-                        name: 'id',
-                        type: 'varchar',
-                        isPrimary: true,
-                        generationStrategy: 'uuid',
-                        default: 'uuid_generate_v4()',
-                    },
-                    {
-                        name:  'provider',
-                        type: 'varchar',
-                        isNullable: false,
-                    },
-                    {
-                        name: 'date',
-                        type: 'timestamp with time zone',
-                        isNullable: false,
-                    }
-                ]
-            })
-        );
-    }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('appointments');
-    }
-
-}
-```
-
-Para criar a tabela no banco de dados: `yarn typeorm migration:run`
-
-O terminal vai exibir as querys que foram executadas.
-
-<img src="https://ik.imagekit.io/dxwebster/Untitled__2__Yg5VpH3Yiq.png" />
-
-
-
-
-
-
-
-
-
-
-
+### 5. Criação das Rotas de Usuários
 
 
 
