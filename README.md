@@ -11,7 +11,7 @@
 
 ---
 
-# 🔖  Sobre
+## 🔖  Sobre
 Essa é o back-end da GoBarber, uma aplicação que permite o agendamento de serviços de cabeleireiros.
 
 ## 📥 Executar esse projeto no seu computador
