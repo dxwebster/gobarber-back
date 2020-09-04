@@ -6,7 +6,7 @@ import AppError from "@shared/errors/AppError";
 import Appointment from "../infra/typeorm/entities/Appointment";
 import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 
-interface IRequestDTO {
+interface IRequest {
     provider_id: string;
     date: Date;
 }
@@ -15,7 +15,7 @@ interface IRequestDTO {
 class CreateAppointmentService {
     constructor( @inject('AppointmentsRepository') private appointmentsRepository: IAppointmentsRepository) {}
 
-    public async execute({ date, provider_id}: IRequestDTO): Promise<Appointment> {
+    public async execute({ date, provider_id}: IRequest): Promise<Appointment> {
         const appointmentDate = startOfHour(date); // startOfHour: formata a hora sem minutos ou segundos
 
         const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(appointmentDate);
