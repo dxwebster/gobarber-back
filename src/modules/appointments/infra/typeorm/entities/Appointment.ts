@@ -1,6 +1,14 @@
 // Arquivo responsável pelo formato dos dados
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import User from './User';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    ManyToOne,
+    JoinColumn,
+} from 'typeorm';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 @Entity('appointments') // indica que o model vai ser armazenado dentro da tabela 'appointments'
 class Appointment {
@@ -22,7 +30,6 @@ class Appointment {
 
     @UpdateDateColumn()
     updated_at: Date;
-
 }
 
 export default Appointment;
