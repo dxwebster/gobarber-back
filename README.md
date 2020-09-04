@@ -19,7 +19,8 @@ Essa é o back-end da GoBarber, uma aplicação que permite o agendamento de ser
 - Clonar Repositório: `git clone https://github.com/dxwebster/GoBarber-API.git`
 - Ir para a pasta: `cd GoBarber-API`
 - Instalar dependências: `yarn install`
-- Rodar Aplicação: `yarn start`
+- Executar o docker: `docker start gostack_postgres`
+- Rodar Aplicação: `yarn dev:server`
 
 ## 🛠 Como criar esse projeto do zero
 ↳ Acesse a Wiki: https://github.com/dxwebster/GoBarber-API/wiki
