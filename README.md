@@ -60,7 +60,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 - Utilizar Amazon SES para envios em produção;
 - O envio de e-mails deve acontecer em segundo plano (background job);
 
-**Regras de Negócio RN**
+**Regras de Negócio**
 
 - O link enviado por email para resetar senha, deve expirar em 2h;
 - O usuário precisa confirmar a nova senha ao resetar sua senha;
