@@ -41,12 +41,7 @@ class AuthenticateUserService {
     }
 
     const { secret, expiresIn } = authConfig.jwt; // verificar se o token é válido
-
-    const token = sign({}, secret, {
-      subject: user.id,
-      expiresIn,
-    });
-
+    const token = sign({}, secret, { subject: user.id, expiresIn });
     return { user, token }; // usuário autenticado
   }
 }
