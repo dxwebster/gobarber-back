@@ -116,6 +116,28 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 - O usuário não pode agendar em um horário que já passou;
 - O usuário não pode agendar serviços consigo mesmo;
 
+# Arquitetura da Aplicação
+
+Modules: Appointments / Users
+
+- dtos: interfaces compartilhadas pelo módulo
+
+- providers: bibliotecas externas
+
+- services: regras de negócio, onde efetivamente o código vai acontecer
+
+- views: arquivos "de interface"
+
+- repositories:
+
+  - tipos dos métodos
+  - "Repositório falso" (CRUDs personalizados)
+
+- infra:
+  - rotas/controllers
+  - banco de dados
+  - "Repositório verdadeiro" (CRUDs personalizados)
+
 ## 📕 Licença
 
 Todos os arquivos incluídos aqui, incluindo este _Readme_, estão sob [Licença MIT](./LICENSE).<br>
