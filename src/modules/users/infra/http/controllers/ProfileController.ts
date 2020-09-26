@@ -12,7 +12,7 @@ export default class ProfileController {
 
     const user = await showProfile.execute({ user_id });
 
-    delete user.password;
+    // delete user.password;
     return response.json(user);
   }
 
@@ -24,7 +24,7 @@ export default class ProfileController {
 
     const user = await updateProfile.execute({ user_id, name, email, old_password, password });
 
-    delete user.password;
+    // delete user.password;
     return response.json(user);
   }
 }
