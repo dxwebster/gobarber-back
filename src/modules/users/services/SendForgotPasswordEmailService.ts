@@ -3,7 +3,7 @@ import path from 'path';
 
 import AppError from '@shared/errors/AppError';
 
-import IUsersRepository from '../repositories/IUserRepository';
+import IUsersRepository from '../repositories/IUsersRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
 

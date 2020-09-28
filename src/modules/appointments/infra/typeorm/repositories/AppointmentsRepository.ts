@@ -14,8 +14,11 @@ class AppointmentsRepository implements IAppointmentsRepository {
     this.ormRepository = getRepository(Appointment);
   }
 
-  public async findByDate(date: Date): Promise<Appointment | undefined> {
-    const findAppointment = await this.ormRepository.findOne({ where: { date } });
+  public async findByDate(date: Date, provider_id: string): Promise<Appointment | undefined> {
+    const findAppointment = await this.ormRepository.findOne({
+      where: { date, provider_id },
+    });
+
     return findAppointment;
   }
 
@@ -25,7 +28,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
     const appointments = await this.ormRepository.find({
       where: {
         provider_id,
-        date: Raw((dateFieldName) => `to_char(${dateFieldName}, 'MM-YYY') = '${parsedMonth}-${year}'`),
+        date: Raw((dateFieldName) => `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`),
       },
     });
 
@@ -39,21 +42,25 @@ class AppointmentsRepository implements IAppointmentsRepository {
     const appointments = await this.ormRepository.find({
       where: {
         provider_id,
-        date: Raw((dateFieldName) => `to_char(${dateFieldName}, 'DD-MM-YYY') = '${parsedDay}-${parsedMonth}-${year}'`),
+        date: Raw((dateFieldName) => `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`),
       },
+      relations: ['user'],
     });
+
     return appointments;
   }
 
   public async create({ provider_id, user_id, date }: ICreateAppointmentDTO): Promise<Appointment> {
-    const appointment = this.ormRepository.create({ provider_id, user_id, date });
+    const appointment = this.ormRepository.create({
+      provider_id,
+      user_id,
+      date,
+    });
+
     await this.ormRepository.save(appointment);
+
     return appointment;
   }
 }
 
 export default AppointmentsRepository;
-
-// Arquivo responsável por tudo que se refere as operações dos dados de agendamendo (appointments)
-// Qualquer função que for ler, criar, listar, buscar, deletar, alterar deve ficar dentro do repositório
-// Ponte entre a aplicação a e o banco de dados
