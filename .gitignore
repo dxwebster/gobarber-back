@@ -1,6 +1,10 @@
+.idea/
+.vscode/
 node_modules/
 build/
 temp/
+.env
+coverage
 
 # //permite que a pasta seja criada, mas sem conteúdo nenhum
 tmp/*
