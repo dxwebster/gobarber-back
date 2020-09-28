@@ -5,6 +5,7 @@ build/
 temp/
 .env
 coverage
+ormconfig.json
 
 # //permite que a pasta seja criada, mas sem conteúdo nenhum
 tmp/*
