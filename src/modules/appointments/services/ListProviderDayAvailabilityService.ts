@@ -31,7 +31,9 @@ class ListProviderDayAvailabilityService {
     });
 
     const hourStart = 8;
+
     const eachHourArray = Array.from({ length: 10 }, (_, index) => index + hourStart);
+
     const currentDate = new Date(Date.now());
 
     const availability = eachHourArray.map((hour) => {
